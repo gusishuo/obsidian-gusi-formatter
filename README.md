@@ -1,10 +1,72 @@
-# 古思排版
+# Gusi Formatter
 
-> Obsidian 插件：把 Markdown 实时转成可直接粘贴进微信公众号的富文本 HTML。右侧即时预览，一键复制，内置四套中文排版主题。
+> An Obsidian plugin that converts Markdown into WeChat-ready rich text HTML in real time — live preview in the side pane, one-click copy, four built-in Chinese typography themes.
 
-**English**: An Obsidian plugin that converts your Markdown note into WeChat-compatible rich text HTML in real time. Preview in a side pane, copy with one click. Four built-in Chinese typography themes.
+**古思排版**：把 Markdown 实时转成可直接粘贴进微信公众号的富文本 HTML，右侧即时预览、一键复制，内置四套中文排版主题。
+
+## Features
+
+- **Real-time conversion** — Markdown → rich text HTML with all styles inlined (WeChat only accepts inline styles)
+- **Side pane preview** — see the real typography as you type, what you see is what you paste
+- **One-click copy** — paste straight into the WeChat editor, no reformatting
+- **Four built-in themes** — ready out of the box, no CSS pasting needed
+- **Custom themes** — add, edit and delete your own CSS themes in the settings, and export any theme's CSS with one click
+
+## Built-in themes
+
+| Theme | Look | Good for |
+|---|---|---|
+| **默认主题** (Default) | Editorial skeleton, black/white/grey with a single accent of yellow, left-aligned headings (Monocle-like) | General long-form writing |
+| **古思** (Gusi) | Clean sans-serif body flow | Everyday WeChat posts |
+| **古思·全端一致** (Gusi Consistent) | LXGW WenKai, warm white background, dark headings, zero decoration | Brand-consistent columns |
+| **宣纸水墨** (Xuanzhi Ink) | Rice-paper background, cinnabar headings, 2.05 line height for slow reading | Essays, book reviews, airy articles |
+
+All four themes are adapted for the WeChat editor: no pseudo-elements, pseudo-classes or media queries (those get stripped by WeChat), restrained border radius, explicit line height.
+
+## Installation
+
+**From the community plugins directory**: Obsidian → Settings → Community plugins → Browse → search "Gusi Formatter" → Install & enable.
+
+**Manually**: download `main.js`, `manifest.json` and `styles.css` from the latest [GitHub release](https://github.com/gusishuo/obsidian-gusi-formatter/releases) into `<your vault>/.obsidian/plugins/gusi-formatter/`, then restart Obsidian and enable the plugin.
+
+## Usage
+
+1. Open a Markdown note
+2. Click the eye icon in the left ribbon to open the preview pane
+3. Pick a theme from the toolbar dropdown
+4. Click "Copy HTML" and paste into the WeChat editor
+
+## Custom themes
+
+Settings → Gusi Formatter → Custom themes → Add custom theme, then paste your CSS.
+
+How to write a theme: the outermost container is `section#markdown2wechatHtml`, with children like `p` / `h1`–`h4` / `blockquote` / `pre code.hljs`. Declare the theme name in a header comment:
+
+```css
+/**
+ * name: My theme
+ * description: One line description
+ */
+```
+
+## Build (developers)
+
+```bash
+npm install
+npm run build     # output in dist/gusi-formatter/
+```
+
+The build uses esbuild (the original rollup + rollup-plugin-typescript2 chain no longer works on current Node). To add a built-in theme, just drop a CSS file into `themes/` — `prebuild` regenerates the index automatically, no TypeScript changes needed.
+
+## Credits & license
+
+Forked from [imhaiqiao/obsidian-convert-markdown-to-html-plugin](https://github.com/imhaiqiao/obsidian-convert-markdown-to-html-plugin) — thanks to the original author Haiqiao. The core conversion and preview logic come from the original project; this fork mainly adds Chinese typography themes and WeChat-specific adaptations.
+
+MIT License, see [LICENSE](./LICENSE).
 
 ---
+
+# 中文说明
 
 ## 它能干什么
 
@@ -27,20 +89,20 @@
 
 ## 安装
 
-**方式一**：Obsidian → 设置 → 第三方插件 → 社区插件市场 → 搜索「古思排版」→ 安装并启用。
+**方式一**：Obsidian → 设置 → 第三方插件 → 社区插件市场 → 搜索「Gusi Formatter」→ 安装并启用。
 
 **方式二（手动）**：从 GitHub Releases 下载最新的 `main.js`、`manifest.json`、`styles.css`，放到 `<你的库>/.obsidian/plugins/gusi-formatter/` 下，重启 Obsidian 启用。
 
 ## 使用
 
 1. 打开一篇 Markdown 笔记
-2. 打开侧栏的排版预览面板
+2. 点左侧栏的眼睛图标，打开排版预览面板
 3. 在工具栏的下拉里选主题
-4. 点「复制 HTML」，粘贴到公众号后台
+4. 点「Copy HTML」，粘贴到公众号后台
 
 ## 自定义主题
 
-设置 → 古思排版 → Custom Theme Management → Add Custom Theme，粘贴 CSS 即可。
+设置 → Gusi Formatter → Custom themes → Add custom theme，粘贴 CSS 即可。
 
 主题 CSS 的写法：最外层容器是 `section#markdown2wechatHtml`，子元素写 `p` / `h1`–`h4` / `blockquote` / `pre code.hljs` 等。头部可以写注释声明主题名：
 
@@ -50,16 +112,6 @@
  * description: 一句话说明
  */
 ```
-
-## 构建（开发者）
-
-```bash
-npm install
-npm run build     # 产出在 dist/gusi-formatter/
-npm run deploy    # 复制到本机 vault（路径见 package.json）
-```
-
-构建使用 esbuild（原项目的 rollup + rollup-plugin-typescript2 链在当前 Node 下已失效）。新增内置主题：往 `themes/` 里放一个 CSS 文件即可，`prebuild` 会自动生成索引，不需要改 TypeScript 代码。
 
 ## 来源与许可
 

@@ -1,0 +1,457 @@
+/**
+ * name: 宣纸水墨
+ * description: 宣纸底 · 文楷正文 · 朱砂点睛 · 慢读节奏。适合随笔、书评一类需要沉下来的文章。
+ * note: 字号 17.5px / 行高 2.05 / 宣纸色底
+ */
+
+/* =====================
+   基础排版
+   ===================== */
+section#markdown2wechatHtml {
+  font-family: "LXGW WenKai", "Kaiti SC", "STKaiti", "KaiTi", "Songti SC", "Source Han Serif SC", serif;
+  font-size: 17.5px;
+  color: #33312C;
+  line-height: 2.05;
+  letter-spacing: 0.3px;
+  padding: 22px 18px;
+  word-break: break-word;
+  word-wrap: break-word;
+  text-align: left;
+  background-color: #F6F4EE;
+}
+
+/* =====================
+   正文段落
+   ===================== */
+p {
+  font-family: "LXGW WenKai", "Kaiti SC", "STKaiti", "KaiTi", "Songti SC", "Source Han Serif SC", serif;
+  font-size: 17.5px;
+  line-height: 2.05;
+  color: #33312C;
+  letter-spacing: 0.3px;
+  text-align: justify;
+  text-justify: inter-character;
+  padding-top: 7px;
+  padding-bottom: 7px;
+  margin: 0;
+}
+
+/* =====================
+   文章标题
+   ===================== */
+h1 {
+  font-family: "LXGW WenKai", "Kaiti SC", "STKaiti", "KaiTi", "Songti SC", serif;
+  font-size: 22px;
+  font-weight: 500;
+  color: #2E2C27;
+  line-height: 1.9;
+  text-align: center;
+  letter-spacing: 4px;
+  margin-top: 30px;
+  margin-bottom: 22px;
+}
+
+/* =====================
+   章节标题 · 朱砂
+   ===================== */
+h2 {
+  font-family: "LXGW WenKai", "Kaiti SC", "STKaiti", "KaiTi", "Songti SC", serif;
+  font-size: 19px;
+  font-weight: 500;
+  color: #9E2B25;
+  line-height: 1.85;
+  letter-spacing: 1.5px;
+  text-align: left;
+  margin-top: 34px;
+  margin-bottom: 12px;
+}
+
+h3 {
+  font-family: "LXGW WenKai", "Kaiti SC", "STKaiti", "KaiTi", "Songti SC", serif;
+  font-size: 17.5px;
+  font-weight: 500;
+  color: #2E2C27;
+  line-height: 1.85;
+  letter-spacing: 1px;
+  margin-top: 26px;
+  margin-bottom: 10px;
+}
+
+h4 {
+  font-family: "LXGW WenKai", "Kaiti SC", "STKaiti", "KaiTi", "Songti SC", serif;
+  font-size: 16.5px;
+  font-weight: 500;
+  color: #4A473F;
+  line-height: 1.85;
+  letter-spacing: 0.8px;
+  margin-top: 22px;
+  margin-bottom: 8px;
+}
+
+/* =====================
+   强调
+   ===================== */
+strong {
+  color: #9E2B25;
+  font-weight: 600;
+}
+
+em {
+  font-style: italic;
+  color: #6B675E;
+}
+
+/* =====================
+   引用 · 淡墨块
+   ===================== */
+blockquote {
+  margin: 20px 0;
+  padding: 16px 18px;
+  background: #EFECE3;
+  border-radius: 2px;
+  color: #4A473F;
+  font-size: 17px;
+  line-height: 1.95;
+  letter-spacing: 0.3px;
+}
+
+blockquote p {
+  font-size: 17px;
+  line-height: 1.95;
+  color: #4A473F;
+  padding: 0;
+  margin: 0;
+}
+
+/* =====================
+   链接
+   ===================== */
+a {
+  color: #9E2B25;
+  text-decoration: none;
+  border-bottom: 1px solid rgba(158, 43, 37, 0.35);
+}
+
+/* =====================
+   分隔线
+   ===================== */
+hr {
+  border: none;
+  border-top: 1px solid #DDD8CB;
+  margin: 34px 0;
+}
+
+/* =====================
+   列表
+   ===================== */
+ul {
+  padding-left: 1.5em;
+  margin: 14px 0;
+}
+
+ul li {
+  font-size: 17.5px;
+  line-height: 1.95;
+  color: #33312C;
+  letter-spacing: 0.3px;
+  margin: 6px 0;
+}
+
+ol {
+  padding-left: 1.5em;
+  margin: 14px 0;
+}
+
+ol li {
+  font-size: 17.5px;
+  line-height: 1.95;
+  color: #33312C;
+  letter-spacing: 0.3px;
+  margin: 6px 0;
+}
+
+/* =====================
+   横屏滑动画廊
+   ===================== */
+.swipe-gallery {
+  display: flex;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  gap: 12px;
+  padding: 8px 0 16px;
+  margin: 18px 0;
+}
+
+.swipe-gallery::-webkit-scrollbar {
+  height: 4px;
+}
+
+.swipe-gallery::-webkit-scrollbar-track {
+  background: #DEDACB;
+  border-radius: 2px;
+}
+
+.swipe-gallery::-webkit-scrollbar-thumb {
+  background: #B8B2A3;
+  border-radius: 2px;
+}
+
+.swipe-gallery .swipe-item {
+  flex: 0 0 auto;
+  scroll-snap-align: start;
+  width: 75%;
+  border-radius: 2px;
+  overflow: hidden;
+  background: #EFECE3;
+}
+
+.swipe-gallery .swipe-item img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.swipe-gallery .swipe-item .swipe-caption {
+  font-size: 14px;
+  line-height: 1.7;
+  color: #6B675E;
+  padding: 8px 10px;
+  margin: 0;
+}
+
+.swipe-images {
+  display: flex;
+  overflow-x: auto;
+  gap: 10px;
+  padding: 8px 0 16px;
+  margin: 18px 0;
+}
+
+.swipe-images::-webkit-scrollbar {
+  height: 4px;
+}
+
+.swipe-images::-webkit-scrollbar-track {
+  background: #DEDACB;
+  border-radius: 2px;
+}
+
+.swipe-images::-webkit-scrollbar-thumb {
+  background: #B8B2A3;
+  border-radius: 2px;
+}
+
+.swipe-images img {
+  flex: 0 0 auto;
+  max-height: 320px;
+  border-radius: 2px;
+}
+
+/* =====================
+   图片
+   ===================== */
+img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  margin: 20px auto;
+  border-radius: 2px;
+}
+
+center img {
+  display: block;
+  max-width: 100%;
+  margin: 20px auto;
+  border-radius: 2px;
+}
+
+/* =====================
+   代码块 / 行内代码
+   ===================== */
+pre {
+  margin: 18px 0;
+}
+
+pre code.hljs {
+  overflow-x: auto;
+  padding: 16px;
+  color: #383A42;
+  background: #EFECE3;
+  display: -webkit-box;
+  font-family: "JetBrains Mono", Menlo, Consolas, monospace;
+  font-size: 14px;
+  line-height: 1.75;
+  border-radius: 2px;
+}
+
+code {
+  background: #EFECE3;
+  color: #4A473F;
+  padding: 2px 6px;
+  border-radius: 2px;
+  font-family: "JetBrains Mono", Menlo, Consolas, monospace;
+  font-size: 15px;
+}
+
+/* =====================
+   表格
+   ===================== */
+section.table-container {
+  overflow-x: auto;
+  margin: 18px 0;
+}
+
+table {
+  border-collapse: collapse;
+  width: 100%;
+  font-size: 16px;
+}
+
+table th {
+  background: #EFECE3;
+  color: #2E2C27;
+  font-weight: 500;
+  text-align: left;
+  padding: 9px 12px;
+  border: 1px solid #DDD8CB;
+}
+
+table td {
+  padding: 9px 12px;
+  border: 1px solid #DDD8CB;
+  color: #33312C;
+}
+
+/* =====================
+   代码高亮（Atom One Light）
+   ===================== */
+.hljs { color: #383a42; background: #fafafa; }
+.hljs-comment,
+.hljs-quote { color: #a0a1a7; font-style: italic; }
+.hljs-doctag,
+.hljs-keyword,
+.hljs-formula { color: #a626a4; }
+.hljs-section,
+.hljs-name,
+.hljs-selector-tag,
+.hljs-deletion,
+.hljs-subst { color: #e45649; }
+.hljs-literal { color: #0184bb; }
+.hljs-string,
+.hljs-regexp,
+.hljs-addition,
+.hljs-attribute,
+.hljs-meta .hljs-string { color: #50a14f; }
+.hljs-attr,
+.hljs-variable,
+.hljs-template-variable,
+.hljs-type,
+.hljs-selector-class,
+.hljs-selector-attr,
+.hljs-selector-pseudo,
+.hljs-number { color: #986801; }
+.hljs-symbol,
+.hljs-bullet,
+.hljs-link,
+.hljs-meta,
+.hljs-selector-id,
+.hljs-title { color: #4078f2; }
+.hljs-built_in,
+.hljs-title.class_,
+.hljs-class .hljs-title { color: #c18401; }
+.hljs-emphasis { font-style: italic; }
+.hljs-strong { font-weight: bold; }
+.hljs-link { text-decoration: underline; }
+
+/* =====================
+   补充 · 小标题与标记元素（原版缺失，发布前补齐）
+   ===================== */
+h5 {
+  font-family: "LXGW WenKai", "Kaiti SC", "STKaiti", "KaiTi", "Songti SC", "Source Han Serif SC", serif;
+  font-size: 17px;
+  font-weight: 600;
+  color: #33312C;
+  line-height: 1.7;
+  text-align: left;
+  margin-top: 16px;
+  margin-bottom: 8px;
+  padding: 0;
+  background: none;
+  border: none;
+  display: block;
+}
+
+h6 {
+  font-family: "LXGW WenKai", "Kaiti SC", "STKaiti", "KaiTi", "Songti SC", "Source Han Serif SC", serif;
+  font-size: 14px;
+  font-weight: 600;
+  color: #8A847A;
+  line-height: 1.7;
+  letter-spacing: 0.12em;
+  text-align: left;
+  margin-top: 14px;
+  margin-bottom: 6px;
+  padding: 0;
+  background: none;
+  border: none;
+  display: block;
+}
+
+del, s {
+  color: #9A948A;
+}
+
+mark {
+  background-color: #F0E1DC;
+  color: #9E2B25;
+  padding: 1px 2px;
+}
+
+sub, sup {
+  font-size: 0.7em;
+  line-height: 0;
+  color: inherit;
+  vertical-align: baseline;
+  position: relative;
+}
+
+sub {
+  bottom: -0.25em;
+}
+
+sup {
+  top: -0.5em;
+}
+
+figure {
+  margin: 18px 0;
+  padding: 0;
+}
+
+figure img {
+  margin-bottom: 0;
+}
+
+figcaption {
+  font-family: "LXGW WenKai", "Kaiti SC", "STKaiti", "KaiTi", "Songti SC", "Source Han Serif SC", serif;
+  font-size: 13.5px;
+  color: #8A847A;
+  line-height: 1.6;
+  text-align: center;
+  padding-top: 8px;
+  margin: 0;
+}
+
+li section {
+  margin-top: 5px;
+  margin-bottom: 5px;
+  line-height: 2.05;
+  text-align: left;
+  color: #33312C;
+}
+
+input[type="checkbox"] {
+  margin-right: 6px;
+  vertical-align: middle;
+}

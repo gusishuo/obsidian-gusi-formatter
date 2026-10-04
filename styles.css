@@ -1,0 +1,79 @@
+/* =====================
+   主题管理与设置页样式
+   ===================== */
+.custom-theme-title-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.custom-theme-title-row button {
+  margin-left: 16px;
+}
+
+.theme-css-textarea {
+  width: 100%;
+  height: 160px;
+}
+
+/* =====================
+   预览面板整体样式
+   ===================== */
+.wechat-html-preview {
+  background: #fff;
+  padding: var(--file-margins) var(--file-margins) 50px var(--file-margins);
+  min-height: 100%;
+  box-sizing: border-box;
+  overflow: auto;
+  width: 100%;
+}
+
+/* =====================
+   工具栏与顶部操作区
+   ===================== */
+.wechat-nav-header {
+  padding: 0 !important;
+}
+
+.wechat-html-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 16px;
+}
+
+.wechat-html-toolbar .left,
+.wechat-html-toolbar .center,
+.wechat-html-toolbar .right {
+  flex: 1;
+  display: flex;
+  align-items: center;
+}
+.wechat-html-toolbar .center {
+  justify-content: center;
+}
+.wechat-html-toolbar .right {
+  justify-content: flex-end;
+}
+
+.wechat-theme-select {
+  min-width: 120px;
+}
+
+.wechat-toolbar-btn.close {
+  font-size: 20px;
+}
+
+/* =====================
+   预览内容区样式
+   ===================== */
+.wechat-html-content {
+  box-shadow: 0 0 60px rgba(0,0,0,.1);
+  padding: 25px 20px;
+  margin-bottom: 50px;
+}
+
+.wechat-html-content #markdown2wechathtml {
+  display: block;
+  margin: 0 auto;
+  width: 100%;
+} 

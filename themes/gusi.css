@@ -1,0 +1,479 @@
+/**
+ * name: 古思
+ * description: 文楷正文 · 酒红强调 · 居中标题。古思本人日常用的那套，公众号通用版式。
+ * note: 字号 16.5px / 行高 1.8 / 无底色
+ */
+
+/* =====================
+   基础排版
+   ===================== */
+section#markdown2wechatHtml {
+  font-family: "LXGW WenKai", "Kaiti SC", "STKaiti", "mp-quote", "PingFang SC", system-ui, -apple-system, BlinkMacSystemFont, "Helvetica Neue", "Hiragino Sans GB", "Microsoft YaHei UI", "Microsoft YaHei", Arial, sans-serif;
+  font-size: 16px;
+  color: #3f3f3f;
+  line-height: 1.7;
+  padding: 16px 14px;
+  word-spacing: 0px;
+  letter-spacing: 0;
+  word-break: break-word;
+  word-wrap: break-word;
+  text-align: left;
+}
+
+/* =====================
+   正文段落
+   ===================== */
+p {
+  font-family: "LXGW WenKai", "Kaiti SC", "STKaiti", "mp-quote", "PingFang SC", system-ui, -apple-system, BlinkMacSystemFont, "Helvetica Neue", "Hiragino Sans GB", "Microsoft YaHei UI", "Microsoft YaHei", Arial, sans-serif;
+  font-size: 16.5px;
+  line-height: 1.8;
+  color: #3f3f3f;
+  letter-spacing: 0;
+  text-align: justify; text-justify: inter-character;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  margin: 0;
+}
+
+/* =====================
+   文章标题
+   ===================== */
+h1 {
+  font-family: "LXGW WenKai", "Kaiti SC", "STKaiti", "mp-quote", "PingFang SC", system-ui, -apple-system, BlinkMacSystemFont, "Helvetica Neue", "Hiragino Sans GB", "Microsoft YaHei UI", "Microsoft YaHei", Arial, sans-serif;
+  font-size: 22px;
+  font-weight: 500;
+  color: rgba(0, 0, 0, 0.87);
+  line-height: 1.8;
+  text-align: center;
+  letter-spacing: 4px;
+  margin-top: 20px;
+  margin-bottom: 14px;
+  padding: 0;
+  background: none;
+  border: none;
+  display: block;}
+
+h2 {
+  font-family: "LXGW WenKai", "Kaiti SC", "STKaiti", "mp-quote", "PingFang SC", system-ui, -apple-system, BlinkMacSystemFont, "Helvetica Neue", "Hiragino Sans GB", "Microsoft YaHei UI", "Microsoft YaHei", Arial, sans-serif;
+  font-size: 18px;
+  font-weight: 600;
+  color: #8b4513;
+  letter-spacing: 0.5px;
+  line-height: 1.6;
+  text-align: left;
+  margin-top: 24px;
+  margin-bottom: 14px;
+  padding: 0;
+  background: none;
+  border: none;
+  display: block;}
+
+h3 {
+  font-family: "LXGW WenKai", "Kaiti SC", "STKaiti", "mp-quote", "PingFang SC", system-ui, -apple-system, BlinkMacSystemFont, "Helvetica Neue", "Hiragino Sans GB", "Microsoft YaHei UI", "Microsoft YaHei", Arial, sans-serif;
+  font-size: 16px;
+  font-weight: 500;
+  color: #6b5340;
+  line-height: 1.6;
+  text-align: left;
+  margin-top: 20px;
+  margin-bottom: 8px;
+  padding: 0;}
+
+h4 {
+  font-family: "LXGW WenKai", "Kaiti SC", "STKaiti", "mp-quote", "PingFang SC", system-ui, -apple-system, BlinkMacSystemFont, "Helvetica Neue", "Hiragino Sans GB", "Microsoft YaHei UI", "Microsoft YaHei", Arial, sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  color: #b0894a;
+  line-height: 1.6;
+  text-align: left;
+  margin-top: 16px;
+  margin-bottom: 6px;
+  padding: 0;}
+
+/* =====================
+   粗体 / 斜体
+   ===================== */
+strong {
+  font-weight: 700;
+  color: #ab1942;
+}
+
+em {
+  color: rgba(0, 0, 0, 0.55);
+}
+
+/* =====================
+   引用块
+   ===================== */
+blockquote {
+  display: block;
+  font-family: "LXGW WenKai", "Kaiti SC", "STKaiti", "mp-quote", "PingFang SC", system-ui, -apple-system, BlinkMacSystemFont, "Helvetica Neue", "Hiragino Sans GB", "Microsoft YaHei UI", "Microsoft YaHei", Arial, sans-serif;
+  font-size: 15px;
+  color: rgba(0, 0, 0, 0.55);
+  line-height: 1.6;
+  border-left: 4px solid #dddddd;
+  background: transparent;
+  padding: 10px 10px 10px 20px;
+  margin: 20px 0;
+  overflow: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+blockquote p {
+  font-family: "LXGW WenKai", "Kaiti SC", "STKaiti", "mp-quote", "PingFang SC", system-ui, -apple-system, BlinkMacSystemFont, "Helvetica Neue", "Hiragino Sans GB", "Microsoft YaHei UI", "Microsoft YaHei", Arial, sans-serif;
+  font-size: 16px;
+  color: #333333;
+  line-height: 1.8;
+  letter-spacing: normal;
+  margin: 0;
+  padding-top: 8px;
+  padding-bottom: 8px;
+}
+
+/* =====================
+   链接
+   ===================== */
+a {
+  text-decoration: none;
+  color: #3e64ff;
+  word-wrap: break-word;
+  border-bottom: 1px solid #3e64ff;
+}
+
+/* =====================
+   分割线
+   ===================== */
+hr {
+  height: 1px;
+  margin: 10px 0;
+  padding: 0;
+  border: none;
+  border-top: 1px solid #333333;
+  background: transparent;
+}
+
+/* =====================
+   无序列表（红色圆点）
+   ===================== */
+ul {
+  padding-left: 22px;
+}
+ul li {
+  font-family: "LXGW WenKai", "Kaiti SC", "STKaiti", "mp-quote", "PingFang SC", system-ui, -apple-system, BlinkMacSystemFont, "Helvetica Neue", "Hiragino Sans GB", "Microsoft YaHei UI", "Microsoft YaHei", Arial, sans-serif;
+  font-size: 16px;
+  line-height: 1.7;
+  color: #000000;
+  margin-bottom: 12px;
+}
+
+ol {
+  padding-left: 25px;
+}
+ol li {
+  font-family: "LXGW WenKai", "Kaiti SC", "STKaiti", "mp-quote", "PingFang SC", system-ui, -apple-system, BlinkMacSystemFont, "Helvetica Neue", "Hiragino Sans GB", "Microsoft YaHei UI", "Microsoft YaHei", Arial, sans-serif;
+  font-size: 16px;
+  line-height: 1.6;
+  color: #000000;
+  margin-bottom: 10px;
+}
+
+/* =====================
+   横屏滑动画廊
+   ===================== */
+.swipe-gallery {
+  display: flex;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  gap: 12px;
+  padding: 8px 0 16px;
+  margin: 16px 0;
+}
+
+.swipe-gallery::-webkit-scrollbar {
+  height: 4px;
+}
+.swipe-gallery::-webkit-scrollbar-track {
+  background: #f0f0f0;
+  border-radius: 2px;
+}
+.swipe-gallery::-webkit-scrollbar-thumb {
+  background: #cccccc;
+  border-radius: 2px;
+}
+
+.swipe-gallery .swipe-item {
+  flex: 0 0 auto;
+  scroll-snap-align: start;
+  width: 75%;
+  border-radius: 8px;
+  overflow: hidden;
+  background: #fafafa;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+
+.swipe-gallery .swipe-item img {
+  display: block;
+  width: 100%;
+  border-radius: 8px 8px 0 0;
+  margin: 0;
+}
+
+.swipe-gallery .swipe-item .swipe-caption {
+  padding: 10px 12px;
+  font-size: 14px;
+  color: #666;
+  line-height: 1.5;
+}
+
+.swipe-images {
+  display: flex;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  gap: 8px;
+  padding: 8px 0;
+  margin: 12px 0;
+}
+
+.swipe-images::-webkit-scrollbar {
+  height: 4px;
+}
+.swipe-images::-webkit-scrollbar-track {
+  background: #f0f0f0;
+  border-radius: 2px;
+}
+.swipe-images::-webkit-scrollbar-thumb {
+  background: #cccccc;
+  border-radius: 2px;
+}
+
+.swipe-images img {
+  flex: 0 0 auto;
+  scroll-snap-align: start;
+  width: 70%;
+  border-radius: 6px !important;
+  margin: 0 !important;
+}
+
+/* =====================
+   图片（4px圆角）
+   ===================== */
+img {
+  display: block;
+  max-width: 100%;
+  border-radius: 4px;
+  margin: 10px auto;
+}
+
+center img {
+  display: block;
+  margin: 0 auto;
+  max-width: 100%;
+  border-radius: 4px;
+}
+
+/* =====================
+   代码块 / 行内代码
+   ===================== */
+pre {
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+pre code.hljs {
+  overflow-x: auto;
+  padding: 16px;
+  color: #383a42;
+  background: #fafafa;
+  display: -webkit-box;
+  font-family: Operator Mono, Consolas, Monaco, Menlo, monospace;
+  border-radius: 0px;
+  font-size: 14px;
+  -webkit-overflow-scrolling: touch;
+}
+
+code {
+  font-size: 14px;
+  word-wrap: break-word;
+  padding: 2px 4px;
+  border-radius: 4px;
+  margin: 0 2px;
+  color: #1e6bb8;
+  background-color: rgba(27,31,35,.05);
+  font-family: Operator Mono, Consolas, Monaco, Menlo, monospace;
+  word-break: break-all;
+}
+
+/* =====================
+   表格
+   ===================== */
+section.table-container {
+  overflow-x: auto;
+}
+
+table {
+  display: table;
+  border-collapse: collapse;
+}
+
+table th {
+  font-size: 14px;
+  border: 1px solid #ccc;
+  padding: 5px 10px;
+  text-align: left;
+  font-weight: bold;
+  background-color: #f0f0f0;
+  min-width: 85px;
+}
+
+table td {
+  font-size: 14px;
+  border: 1px solid #ccc;
+  padding: 5px 10px;
+  text-align: left;
+  min-width: 85px;
+}
+
+table tbody {
+  border: 0;
+}
+
+table tbody tr {
+  border: 0;
+  border-top: 1px solid #ccc;
+  background-color: white;
+}
+
+/* =====================
+   代码高亮（Atom One Light）
+   ===================== */
+.hljs { color: #383a42; background: #fafafa; }
+.hljs-comment,
+.hljs-quote { color: #a0a1a7; font-style: italic; }
+.hljs-doctag,
+.hljs-keyword,
+.hljs-formula { color: #a626a4; }
+.hljs-section,
+.hljs-name,
+.hljs-selector-tag,
+.hljs-deletion,
+.hljs-subst { color: #e45649; }
+.hljs-literal { color: #0184bb; }
+.hljs-string,
+.hljs-regexp,
+.hljs-addition,
+.hljs-attribute,
+.hljs-meta .hljs-string { color: #50a14f; }
+.hljs-attr,
+.hljs-variable,
+.hljs-template-variable,
+.hljs-type,
+.hljs-selector-class,
+.hljs-selector-attr,
+.hljs-selector-pseudo,
+.hljs-number { color: #986801; }
+.hljs-symbol,
+.hljs-bullet,
+.hljs-link,
+.hljs-meta,
+.hljs-selector-id,
+.hljs-title { color: #4078f2; }
+.hljs-built_in,
+.hljs-title.class_,
+.hljs-class .hljs-title { color: #c18401; }
+.hljs-emphasis { font-style: italic; }
+.hljs-strong { font-weight: bold; }
+.hljs-link { text-decoration: underline; }
+
+/* =====================
+   补充 · 小标题与标记元素（原版缺失，发布前补齐）
+   ===================== */
+h5 {
+  font-family: "LXGW WenKai", "Kaiti SC", "STKaiti", "mp-quote", "PingFang SC", system-ui, -apple-system, BlinkMacSystemFont, "Helvetica Neue", "Hiragino Sans GB", "Microsoft YaHei UI", "Microsoft YaHei", Arial, sans-serif;
+  font-size: 16px;
+  font-weight: 600;
+  color: #3f3f3f;
+  line-height: 1.7;
+  text-align: left;
+  margin-top: 16px;
+  margin-bottom: 8px;
+  padding: 0;
+  background: none;
+  border: none;
+  display: block;
+}
+
+h6 {
+  font-family: "LXGW WenKai", "Kaiti SC", "STKaiti", "mp-quote", "PingFang SC", system-ui, -apple-system, BlinkMacSystemFont, "Helvetica Neue", "Hiragino Sans GB", "Microsoft YaHei UI", "Microsoft YaHei", Arial, sans-serif;
+  font-size: 13.5px;
+  font-weight: 600;
+  color: rgba(0,0,0,0.5);
+  line-height: 1.7;
+  letter-spacing: 0.12em;
+  text-align: left;
+  margin-top: 14px;
+  margin-bottom: 6px;
+  padding: 0;
+  background: none;
+  border: none;
+  display: block;
+}
+
+del, s {
+  color: rgba(0,0,0,0.4);
+}
+
+mark {
+  background-color: #FBE9EB;
+  color: #ab1942;
+  padding: 1px 2px;
+}
+
+sub, sup {
+  font-size: 0.7em;
+  line-height: 0;
+  color: inherit;
+  vertical-align: baseline;
+  position: relative;
+}
+
+sub {
+  bottom: -0.25em;
+}
+
+sup {
+  top: -0.5em;
+}
+
+figure {
+  margin: 18px 0;
+  padding: 0;
+}
+
+figure img {
+  margin-bottom: 0;
+}
+
+figcaption {
+  font-family: "LXGW WenKai", "Kaiti SC", "STKaiti", "mp-quote", "PingFang SC", system-ui, -apple-system, BlinkMacSystemFont, "Helvetica Neue", "Hiragino Sans GB", "Microsoft YaHei UI", "Microsoft YaHei", Arial, sans-serif;
+  font-size: 13px;
+  color: rgba(0,0,0,0.5);
+  line-height: 1.6;
+  text-align: center;
+  padding-top: 8px;
+  margin: 0;
+}
+
+li section {
+  margin-top: 5px;
+  margin-bottom: 5px;
+  line-height: 1.8;
+  text-align: left;
+  color: #3f3f3f;
+}
+
+input[type="checkbox"] {
+  margin-right: 6px;
+  vertical-align: middle;
+}

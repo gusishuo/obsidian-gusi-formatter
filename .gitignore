@@ -1,0 +1,25 @@
+# Node
+node_modules/
+
+# Build output
+dist/
+
+# Logs
+*.log
+
+# System
+.DS_Store
+
+# IDE
+.vscode/
+.idea/
+
+# Env
+.env
+
+# Auto-generated theme index
+themes/index.ts
+
+# Lock file
+package-lock.json 
+data.json

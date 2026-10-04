@@ -1,0 +1,44 @@
+{
+  "name": "gusi-formatter",
+  "version": "1.0.0",
+  "description": "Obsidian 插件：把 Markdown 实时转成可直接粘贴进微信公众号的富文本 HTML，右侧即时预览、一键复制，内置四套中文排版主题。",
+  "main": "main.ts",
+  "scripts": {
+    "prebuild": "node scripts/gen-theme-index.js",
+    "build": "esbuild main.ts --bundle --format=cjs --platform=node --external:obsidian --loader:.css=text --jsx=automatic --ignore-annotations --charset=utf8 --outfile=dist/gusi-formatter/main.js && cp styles.css manifest.json dist/gusi-formatter/",
+    "deploy": "cp -r dist/gusi-formatter /Users/Zhuanz/Desktop/Obsidian/.obsidian/plugins"
+  },
+  "keywords": [
+    "obsidian-plugin",
+    "markdown",
+    "wechat",
+    "html",
+    "preview"
+  ],
+  "author": "Gus",
+  "license": "MIT",
+  "devDependencies": {
+    "@rollup/plugin-commonjs": "^28.0.6",
+    "@rollup/plugin-json": "^6.1.0",
+    "@rollup/plugin-node-resolve": "^16.0.1",
+    "@types/markdown-it": "^14.1.2",
+    "@types/node": "^20.19.2",
+    "@types/react": "^18.3.23",
+    "obsidian": "^1.8.7",
+    "rollup": "^4.44.1",
+    "rollup-plugin-copy": "^3.5.0",
+    "rollup-plugin-postcss": "^4.0.2",
+    "rollup-plugin-string": "^3.0.0",
+    "rollup-plugin-typescript2": "^0.36.0",
+    "typescript": "^5.0.0",
+    "esbuild": "^0.28.2"
+  },
+  "dependencies": {
+    "juice": "^8.0.0",
+    "katex": "^0.16.22",
+    "markdown-it": "^13.0.0",
+    "markdown-it-highlightjs": "^4.1.0",
+    "markdown-it-katex": "^2.0.3",
+    "react": "^18.0.0"
+  }
+}

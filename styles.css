@@ -27,6 +27,11 @@
   width: 100%;
 }
 
+/* view-content 只作为外层容器，内边距交给内层滚动区 */
+.view-content.wechat-html-preview {
+  padding: 0;
+}
+
 /* =====================
    工具栏与顶部操作区
    ===================== */

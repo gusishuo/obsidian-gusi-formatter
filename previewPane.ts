@@ -1,241 +1,204 @@
-// 预览面板模块
-// 负责在Obsidian右侧显示实时HTML预览，支持主题切换、复制、关闭、滚动同步等功能
-
-// @ts-ignore
-import { ItemView, WorkspaceLeaf, App, Notice } from 'obsidian';
-import { ThemeManager, getAllThemes } from './themeManager';
-import { MarkdownConverter } from './markdownConverter';
+import { ItemView, Notice, TAbstractFile, WorkspaceLeaf, setIcon } from 'obsidian';
+import type Markdown2WechatHtmlPlugin from './main';
+import { getAllThemes } from './themeManager';
+import { MarkdownConverter, htmlToFragment } from './markdownConverter';
 
 export const VIEW_TYPE_WECHAT_PREVIEW = 'wechat-html-preview';
-export const RIBBON_ICON_TEXT = 'WeChat Rich Text Preview';
+export const RIBBON_ICON_TEXT = 'WeChat rich text preview';
 
 /**
  * 预览面板类，负责在 Obsidian 右侧显示实时 HTML 预览，支持主题切换、复制、关闭等。
  */
 export class WechatHtmlPreviewView extends ItemView {
-    plugin: any;
-    themeManager: ThemeManager;
+    plugin: Markdown2WechatHtmlPlugin;
     converter: MarkdownConverter;
     previewEl!: HTMLElement;
     toolbarEl: HTMLElement | null = null;
-    scrollSync: boolean = true;
-    activeFileListener: any = null;
-    fileSaveListener: any = null;
-    lastActiveFilePath: string | null = null;
+    private lastActiveFilePath: string | null = null;
 
     /**
-     * 构造函数，初始化主题管理器、转换器等。
+     * 构造函数，初始化转换器等。
      */
-    constructor(leaf: WorkspaceLeaf, plugin: any) {
+    constructor(leaf: WorkspaceLeaf, plugin: Markdown2WechatHtmlPlugin) {
         super(leaf);
         this.plugin = plugin;
-        this.themeManager = new ThemeManager(plugin);
         this.converter = new MarkdownConverter();
     }
 
     /**
      * 返回视图类型标识。
      */
-    getViewType() {
+    getViewType(): string {
         return VIEW_TYPE_WECHAT_PREVIEW;
     }
 
     /**
      * 返回视图标题文本。
      */
-    getDisplayText() {
+    getDisplayText(): string {
         return RIBBON_ICON_TEXT;
     }
 
     /**
      * 视图打开时初始化 UI、监听事件。
      */
-    async onOpen() {
-        // 优先插入到view-content内，避免顶部空隙
-        // @ts-ignore
-        const viewContent = this.containerEl.querySelector('.view-content') as HTMLElement;
-        if (viewContent) viewContent.style.padding = '0';
-        if (viewContent) viewContent.classList.add('wechat-html-preview');
-        this.previewEl = (viewContent ?? this.containerEl).createDiv('wechat-html-preview');
+    async onOpen(): Promise<void> {
+        // 优先插入到 view-content 内，避免顶部空隙
+        const viewContent = this.containerEl.querySelector<HTMLElement>('.view-content');
+        const host = viewContent ?? this.containerEl;
+        host.addClass('wechat-html-preview');
+        this.previewEl = host.createDiv('wechat-html-preview');
+
         // 工具条先插入内容区顶部
         const toolbar = this.previewEl.createDiv('wechat-html-toolbar');
         this.toolbarEl = toolbar;
-        this.toolbarEl.classList.add('wechat-html-toolbar');
         this.renderToolbar(toolbar);
+
         // 渲染初始内容
-        await this.renderPreview('onOpen', true);
-        // 工具条移动到view-header后新建的nav-header内
-        const viewHeader = this.containerEl.querySelector('.view-header') as HTMLElement;
+        await this.renderPreview(true);
+
+        // 工具条移动到 view-header 后新建的 nav-header 内
+        const viewHeader = this.containerEl.querySelector('.view-header');
         if (viewHeader) {
-            let navHeader = viewHeader.nextElementSibling as HTMLElement;
+            let navHeader = viewHeader.nextElementSibling;
             if (!navHeader || !navHeader.classList.contains('nav-header')) {
-                navHeader = document.createElement('div');
-                navHeader.className = 'nav-header wechat-nav-header';
+                navHeader = createDiv({ cls: 'nav-header wechat-nav-header' });
                 viewHeader.parentNode?.insertBefore(navHeader, viewHeader.nextSibling);
             }
             navHeader.appendChild(toolbar);
         }
-        // 监听文档切换
-        this.activeFileListener = this.onActiveLeafChange;
-        this.plugin.app.workspace.on('active-leaf-change', this.activeFileListener);
-        // 监听内容变更
-        this.fileSaveListener = this.onFileModify;
-        this.plugin.app.vault.on('modify', this.fileSaveListener);
+
+        // 监听文档切换与内容变更
+        this.registerEvent(this.app.workspace.on('active-leaf-change', this.onActiveLeafChange));
+        this.registerEvent(this.app.vault.on('modify', this.onFileModify));
     }
 
     /**
      * 文档切换时触发，刷新预览。
      */
-    onActiveLeafChange = async () => {
-        const activeLeaf = this.plugin.app.workspace.activeLeaf;
-        if (!activeLeaf || activeLeaf.getViewState().type !== 'markdown') return;
-        const file = this.plugin.app.workspace.getActiveFile();
-        if (!file) return;
-        if (file.path !== this.lastActiveFilePath) {
-            this.lastActiveFilePath = file.path;
-            await this.renderPreview('switch-file', true); // 滚动条归零
-        }
-    }
+    private readonly onActiveLeafChange = (): void => {
+        const file = this.app.workspace.getActiveFile();
+        if (!file || file.path === this.lastActiveFilePath) return;
+        this.lastActiveFilePath = file.path;
+        void this.renderPreview(true); // 滚动条归零
+    };
 
     /**
      * 文档内容变更时触发，刷新预览。
      */
-    onFileModify = async (file: any) => {
-        const activeFile = this.plugin.app.workspace.getActiveFile();
+    private readonly onFileModify = (file: TAbstractFile): void => {
+        const activeFile = this.app.workspace.getActiveFile();
         if (!activeFile || file.path !== activeFile.path) return;
-        await this.renderPreview('modify', false); // 保持滚动条
-    }
+        void this.renderPreview(false); // 保持滚动条
+    };
 
     /**
      * 渲染顶部工具栏（主题选择、复制、关闭）。
      */
-    async renderToolbar(toolbar?: HTMLElement) {
-        if (!toolbar) toolbar = this.toolbarEl as HTMLElement;
-        if (!toolbar) return;
-        toolbar.empty?.(); // 清空旧内容
+    renderToolbar(toolbar?: HTMLElement): void {
+        const target = toolbar ?? this.toolbarEl;
+        if (!target) return;
+        target.empty();
+
         // 左侧：主题选择
-        const left = document.createElement('div');
-        left.className = 'left';
-        // 获取所有主题
-        const allThemes = this.plugin.themeManager ? getAllThemes(this.plugin.settings) : [];
-        // 当前主题：优先用全局默认
-        let curTheme = this.plugin.settings.defaultTheme;
-        // 主题选择器
+        const left = createDiv({ cls: 'left' });
         const themeSelect = left.createEl('select');
         themeSelect.className = 'wechat-theme-select dropdown';
-        for (const theme of allThemes) {
+        for (const theme of getAllThemes(this.plugin.settings)) {
             themeSelect.createEl('option', { text: theme.name, value: theme.name });
         }
-        themeSelect.value = curTheme;
-        themeSelect.onchange = async () => {
-            this.plugin.settings.defaultTheme = themeSelect.value;
-            await this.plugin.saveSettings?.();
-            await this.plugin.refreshAllThemeSelectors?.();
-            await this.renderPreview('theme-change', true); // 切换主题归零
+        themeSelect.value = this.plugin.settings.defaultTheme;
+        themeSelect.onchange = () => {
+            void this.onThemeChange(themeSelect.value);
         };
-        toolbar.appendChild(left);
+        target.appendChild(left);
+
         // 中间：复制按钮
-        const center = document.createElement('div');
-        center.className = 'center';
+        const center = createDiv({ cls: 'center' });
         const copyBtn = center.createEl('button', { text: 'Copy HTML' });
         copyBtn.addClass('wechat-toolbar-btn');
-        copyBtn.onclick = async () => {
-            const html = await this.getPreviewHtml();
-            await navigator.clipboard.write([
-                new ClipboardItem({
-                    'text/html': new Blob([html], { type: 'text/html' })
-                })
-            ]);
-            // @ts-ignore
-            new window.Notice('HTML copied to clipboard');
+        copyBtn.onclick = () => {
+            void this.copyHtml();
         };
-        toolbar.appendChild(center);
+        target.appendChild(center);
+
         // 右侧：关闭按钮
-        const right = document.createElement('div');
-        right.className = 'right';
-        const closeBtn = right.createEl('button');
-        closeBtn.classList.add('close');
-        closeBtn.innerHTML = '&times;'; // [x]图标
-        closeBtn.title = 'Close';
+        const right = createDiv({ cls: 'right' });
+        const closeBtn = right.createEl('button', { cls: 'close' });
+        setIcon(closeBtn, 'x');
+        closeBtn.setAttribute('aria-label', 'Close preview');
         closeBtn.onclick = () => {
-            this.plugin.app.workspace.detachLeavesOfType(VIEW_TYPE_WECHAT_PREVIEW);
+            this.app.workspace.detachLeavesOfType(VIEW_TYPE_WECHAT_PREVIEW);
         };
-        toolbar.appendChild(right);
+        target.appendChild(right);
+    }
+
+    /**
+     * 切换主题：保存设置并刷新预览。
+     */
+    private async onThemeChange(value: string): Promise<void> {
+        this.plugin.settings.defaultTheme = value;
+        await this.plugin.saveSettings();
+        await this.plugin.refreshAllThemeSelectors();
+        await this.renderPreview(true);
+    }
+
+    /**
+     * 把当前预览的 HTML 以 text/html 形式写入剪贴板。
+     */
+    private async copyHtml(): Promise<void> {
+        const html = await this.getPreviewHtml();
+        await navigator.clipboard.write([
+            new ClipboardItem({
+                'text/html': new Blob([html], { type: 'text/html' }),
+            }),
+        ]);
+        new Notice('HTML copied to clipboard');
     }
 
     /**
      * 渲染 HTML 预览内容。
      */
-    async renderPreview(trigger: string = '', resetScroll: boolean = false) {
-        // 记录刷新前的滚动位置（针对.wechat-html-preview）
-        let prevScrollTop = 0;
-        if (this.previewEl) {
-            prevScrollTop = this.previewEl.scrollTop;
-        }
+    private async renderPreview(resetScroll: boolean): Promise<void> {
+        // 记录刷新前的滚动位置
+        const prevScrollTop = this.previewEl ? this.previewEl.scrollTop : 0;
         // 清空旧内容
         this.previewEl.querySelectorAll('.wechat-html-content').forEach(el => el.remove());
-        // 获取当前文档路径
-        const file = this.plugin.app.workspace.getActiveFile();
-        if (!file) {
-            return;
-        }
-        // 设置图片路径处理上下文
-        this.converter.setVaultAndFile(this.plugin.app.vault, file);
-        // 获取所有主题
-        const allThemes = this.plugin.themeManager ? getAllThemes(this.plugin.settings) : [];
-        // 当前主题：优先用全局默认
-        let curTheme = this.plugin.settings.defaultTheme;
-        // 获取主题CSS
-        const theme = allThemes.find(t => t.name === curTheme);
+
+        const file = this.app.workspace.getActiveFile();
+        if (!file) return;
+        this.converter.setVaultAndFile(this.app.vault, file);
+
+        const current = this.plugin.settings.defaultTheme;
+        const theme = getAllThemes(this.plugin.settings).find(t => t.name === current);
         const css = theme ? theme.css : '';
-        // 获取当前文档markdown内容
-        const markdown = await this.plugin.app.vault.read(file);
-        // 转换为HTML
+        const markdown = await this.app.vault.read(file);
         const html = this.converter.convert(markdown, css);
-        // 显示内容
-        // @ts-ignore
+
         const contentDiv = this.previewEl.createDiv('wechat-html-content');
-        contentDiv.innerHTML = html;
-        // 根据来源决定滚动条行为（操作.wechat-html-preview）
-        if (resetScroll) {
-            this.previewEl.scrollTop = 0;
-        } else {
-            this.previewEl.scrollTop = prevScrollTop;
-        }
+        contentDiv.appendChild(htmlToFragment(html));
+
+        // 决定滚动条行为
+        this.previewEl.scrollTop = resetScroll ? 0 : prevScrollTop;
     }
 
     /**
      * 获取当前文档的 HTML 预览源码。
      */
     async getPreviewHtml(): Promise<string> {
-        // 获取当前文档markdown内容并转换为HTML
-        const file = this.plugin.app.workspace.getActiveFile();
+        const file = this.app.workspace.getActiveFile();
         if (!file) return '';
-        // 获取所有主题
-        const allThemes = this.plugin.themeManager ? getAllThemes(this.plugin.settings) : [];
-        // 当前主题：优先用全局默认
-        let curTheme = this.plugin.settings.defaultTheme;
-        // 获取主题CSS
-        const theme = allThemes.find(t => t.name === curTheme);
-        const css = theme ? theme.css : '';
-        const markdown = await this.plugin.app.vault.read(file);
-        return this.converter.convert(markdown, css);
+        this.converter.setVaultAndFile(this.app.vault, file);
+        const current = this.plugin.settings.defaultTheme;
+        const theme = getAllThemes(this.plugin.settings).find(t => t.name === current);
+        const markdown = await this.app.vault.read(file);
+        return this.converter.convert(markdown, theme ? theme.css : '');
     }
 
     /**
-     * 视图关闭时清理 UI、注销监听。
+     * 视图关闭时清理 UI。
      */
-    async onClose() {
-        // 清理操作
+    onClose(): void {
         this.previewEl?.remove();
-        // 注销监听，避免内存泄漏
-        if (this.activeFileListener) {
-            this.plugin.app.workspace.off('active-leaf-change', this.activeFileListener);
-            this.activeFileListener = null;
-        }
-        if (this.fileSaveListener) {
-            this.plugin.app.vault.off('modify', this.fileSaveListener);
-            this.fileSaveListener = null;
-        }
     }
-} 
+}

@@ -20,6 +20,5 @@ dist/
 # Auto-generated theme index
 themes/index.ts
 
-# Lock file
-package-lock.json 
+# Obsidian plugin data
 data.json

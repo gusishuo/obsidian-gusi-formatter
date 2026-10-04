@@ -1,4 +1,4 @@
-# Gusi Formatter
+# gusi formatter
 
 > An Obsidian plugin that converts Markdown into WeChat-ready rich text HTML in real time — live preview in the side pane, one-click copy, four built-in Chinese typography themes.
 
@@ -25,7 +25,7 @@ All four themes are adapted for the WeChat editor: no pseudo-elements, pseudo-cl
 
 ## Installation
 
-**From the community plugins directory**: Obsidian → Settings → Community plugins → Browse → search "Gusi Formatter" → Install & enable.
+**From the community plugins directory**: Obsidian → Settings → Community plugins → Browse → search "gusi formatter" → Install & enable.
 
 **Manually**: download `main.js`, `manifest.json` and `styles.css` from the latest [GitHub release](https://github.com/gusishuo/obsidian-gusi-formatter/releases) into `<your vault>/.obsidian/plugins/gusi-formatter/`, then restart Obsidian and enable the plugin.
 
@@ -89,7 +89,7 @@ MIT License, see [LICENSE](./LICENSE).
 
 ## 安装
 
-**方式一**：Obsidian → 设置 → 第三方插件 → 社区插件市场 → 搜索「Gusi Formatter」→ 安装并启用。
+**方式一**：Obsidian → 设置 → 第三方插件 → 社区插件市场 → 搜索「gusi formatter」→ 安装并启用。
 
 **方式二（手动）**：从 GitHub Releases 下载最新的 `main.js`、`manifest.json`、`styles.css`，放到 `<你的库>/.obsidian/plugins/gusi-formatter/` 下，重启 Obsidian 启用。
 

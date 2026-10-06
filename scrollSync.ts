@@ -42,6 +42,17 @@ interface Anchor {
 }
 
 /**
+ * 一个可滚动的「源」。
+ * Obsidian 的同一个 MarkdownView 有两种形态，滚动容器完全不同：
+ * - `source`：编辑模式（含 Live Preview），滚动容器是 CodeMirror 的 scroller
+ * - `reading`：阅读模式，没有 CodeMirror 实例，滚动容器是渲染后的 .markdown-preview-view
+ */
+interface ScrollSource {
+    el: HTMLElement;
+    mode: 'source' | 'reading';
+}
+
+/**
  * 宿主接口：由预览面板实现，把 DOM 与设置交给同步控制器，
  * 避免两者互相直接引用。
  */
@@ -77,6 +88,52 @@ function cmOffsetToLine(cm: CmViewLike, offset: number): number {
     return cm.state.doc.lineAt(clamped).number - 1;
 }
 
+/** 取视图当前模式；阅读模式下拿不到 CodeMirror，必须分开处理 */
+function getViewMode(view: MarkdownView): 'source' | 'reading' {
+    return view.getMode() === 'source' ? 'source' : 'reading';
+}
+
+/** 从候选元素里挑真正能滚动的那个 */
+function pickScrollable(candidates: (HTMLElement | null)[]): HTMLElement | null {
+    for (const el of candidates) {
+        if (el && el.scrollHeight - el.clientHeight > 4) return el;
+    }
+    for (const el of candidates) {
+        if (el) return el;
+    }
+    return null;
+}
+
+/**
+ * 收集当前视图所有可能的滚动源。
+ * 两种模式的容器都收进来，这样切换模式时不用重新绑定也能继续工作。
+ */
+function collectScrollSources(view: MarkdownView): ScrollSource[] {
+    const sources: ScrollSource[] = [];
+    const editor = view.editor;
+    const cm = editor ? getCmView(editor) : null;
+    const cmScroller =
+        cm?.scrollDOM ?? view.contentEl?.querySelector<HTMLElement>('.cm-scroller') ?? null;
+    if (cmScroller) sources.push({ el: cmScroller, mode: 'source' });
+    const readingScroller = pickScrollable([
+        view.contentEl?.querySelector<HTMLElement>('.markdown-preview-view') ?? null,
+        view.contentEl?.querySelector<HTMLElement>('.markdown-reading-view') ?? null,
+    ]);
+    if (readingScroller) sources.push({ el: readingScroller, mode: 'reading' });
+    return sources;
+}
+
+/** 拿不到 CodeMirror 完整视图时的兜底：用滚动比例估算偏移量，再换回行号 */
+function lineFromScroller(editor: Editor, scroller: HTMLElement): number | null {
+    const range = scroller.scrollHeight - scroller.clientHeight;
+    const lastLine = Math.max(0, editor.lineCount() - 1);
+    if (range <= 0) return 0;
+    const endOffset = editor.posToOffset({ line: lastLine, ch: 0 });
+    if (endOffset <= 0) return 0;
+    const offset = Math.round((scroller.scrollTop / range) * endOffset);
+    return editor.offsetToPos(offset).line;
+}
+
 /**
  * 编辑区与预览区的滚动同步控制器。
  *
@@ -84,12 +141,14 @@ function cmOffsetToLine(cm: CmViewLike, offset: number): number {
  * 1. 转换 Markdown 时给每个顶层块级元素写入 `data-line`（源文件行号）。
  * 2. 编辑器滚动时，取视口顶部行号，找到预览区里最后一个「行号 ≤ 视口顶行」的块，
  *    把该块顶边对齐到预览视口顶边——按内容对齐，而不是按百分比。
- * 3. 反向同步同理，找到预览视口顶下方第一个块，让编辑器跳到对应行。
- * 4. 用时间窗屏蔽程序化滚动引发的事件回环。
+ * 3. 阅读模式没有 CodeMirror，拿不到行号，退化成按滚动比例同步。
+ * 4. 反向同步同理，找到预览视口顶下方第一个块，让编辑器跳到对应行（仅在编辑模式可用）。
+ * 5. 用时间窗屏蔽程序化滚动引发的事件回环。
  */
 export class ScrollSyncController {
     private readonly host: ScrollSyncHost;
-    private editorScrollEl: HTMLElement | null = null;
+    /** 已绑定 scroll 监听的容器：编辑模式的 cm-scroller 与阅读模式的阅读区，可能同时存在 */
+    private editorScrollEls: HTMLElement[] = [];
     private previewScrollEl: HTMLElement | null = null;
     private suppressEditorUntil = 0;
     private suppressPreviewUntil = 0;
@@ -181,13 +240,22 @@ export class ScrollSyncController {
         this.scrollPreviewToElement(target.el);
     }
 
-    /** 编辑器滚动事件 */
-    private readonly onEditorScroll = (): void => {
-        const mode = this.host.getSyncMode();
-        if (mode === 'off') return;
+    /** 编辑侧滚动事件（编辑模式与阅读模式的容器都会触发，按模式筛选） */
+    private readonly onEditorScroll = (event?: Event): void => {
+        const syncMode = this.host.getSyncMode();
+        if (syncMode === 'off') return;
         const now = Date.now();
         if (this.suppressEditorUntil > now) return;
         if (this.previewDrivenUntil > now) return;
+        // 两个容器都绑了监听，只认当前模式那一个，否则会互相打架
+        const target = event?.target as HTMLElement | null;
+        const view = this.getActiveMarkdownView();
+        if (target && view) {
+            const current = getViewMode(view);
+            const sources = collectScrollSources(view);
+            const active = sources.find(s => s.mode === current) ?? sources[0];
+            if (active && target !== active.el) return;
+        }
         this.schedule(() => {
             if (this.host.getSyncMode() === 'off') return;
             this.applyForward();
@@ -247,19 +315,19 @@ export class ScrollSyncController {
         return found;
     }
 
-    /** 找到当前活动（或最近使用的）Markdown 编辑器 */
-    private getActiveEditor(): Editor | null {
+    /** 找到当前活动（或最近使用的）Markdown 视图 */
+    private getActiveMarkdownView(): MarkdownView | null {
         const workspace = this.host.app.workspace;
         // 焦点在预览面板时 activeLeaf 不是 MarkdownView，所以先试最近使用的叶子
         const recent = workspace.getMostRecentLeaf();
         if (recent && recent.view instanceof MarkdownView) {
-            return recent.view.editor;
+            return recent.view;
         }
         // 退而求其次：找当前可见区域里的第一个 Markdown 视图
-        let result: Editor | null = null;
+        let result: MarkdownView | null = null;
         workspace.iterateAllLeaves(leaf => {
             if (result === null && leaf.view instanceof MarkdownView) {
-                result = leaf.view.editor;
+                result = leaf.view;
             }
         });
         return result;
@@ -268,17 +336,34 @@ export class ScrollSyncController {
     /** 编辑器 → 预览 */
     private applyForward(): void {
         const previewEl = this.host.getPreviewEl();
-        const editor = this.getActiveEditor();
-        if (!previewEl || !editor) return;
-        const cm = getCmView(editor);
+        const view = this.getActiveMarkdownView();
+        if (!previewEl || !view) return;
         const anchors = this.collectAnchors();
         if (anchors.length === 0) return;
-        if (!cm) {
-            this.syncByRatio(findEditorScroller(editor), previewEl);
+
+        const mode = getViewMode(view);
+        const sources = collectScrollSources(view);
+        const source = sources.find(s => s.mode === mode) ?? sources[0];
+        if (!source) return;
+
+        // 阅读模式没有 CodeMirror，拿不到源文件行号，只能按比例同步
+        if (source.mode === 'reading') {
+            this.syncByRatio(source.el, previewEl);
             return;
         }
-        // viewport.from 是文档偏移量，必须先换算成行号
-        const topLine = cmOffsetToLine(cm, cm.viewport.from);
+
+        const editor = view.editor;
+        const cm = editor ? getCmView(editor) : null;
+        const topLine = cm
+            ? cmOffsetToLine(cm, cm.viewport.from) // viewport.from 是偏移量，必须先换算成行号
+            : editor
+              ? lineFromScroller(editor, source.el)
+              : null;
+        if (topLine === null) {
+            this.syncByRatio(source.el, previewEl);
+            return;
+        }
+
         let target: Anchor | null = null;
         for (const anchor of anchors) {
             if (anchor.line <= topLine) target = anchor;
@@ -291,10 +376,13 @@ export class ScrollSyncController {
     /** 预览 → 编辑器 */
     private applyReverse(): void {
         const previewEl = this.host.getPreviewEl();
-        const editor = this.getActiveEditor();
-        if (!previewEl || !editor) return;
-        const cm = getCmView(editor);
-        if (!cm) return;
+        const view = this.getActiveMarkdownView();
+        if (!previewEl || !view) return;
+        // 阅读模式没有可跳行的编辑器，反向同步只在编辑模式做
+        if (getViewMode(view) !== 'source') return;
+        const editor = view.editor;
+        const cm = editor ? getCmView(editor) : null;
+        if (!cm || !editor) return;
         const anchors = this.collectAnchors();
         if (anchors.length === 0) return;
         const viewTop = previewEl.getBoundingClientRect().top;
@@ -339,23 +427,27 @@ export class ScrollSyncController {
         previewEl.scrollTop = previewEl.scrollTop + delta;
     }
 
-    /** 绑定编辑器滚动容器（切换文件或布局变化后需要重绑） */
+    /**
+     * 绑定编辑侧的滚动容器。
+     * 编辑模式和阅读模式的容器都绑上，切换模式时不用重新绑定；
+     * 事件里再按当前模式筛选，避免两个容器同时驱动预览。
+     */
     private bindEditorScroll(): void {
         this.unbindEditorScroll();
         if (this.host.getSyncMode() === 'off') return;
-        const editor = this.getActiveEditor();
-        if (!editor) return;
-        const scrollDOM = getCmView(editor)?.scrollDOM;
-        if (!scrollDOM) return;
-        scrollDOM.addEventListener('scroll', this.onEditorScroll, { passive: true });
-        this.editorScrollEl = scrollDOM;
+        const view = this.getActiveMarkdownView();
+        if (!view) return;
+        for (const source of collectScrollSources(view)) {
+            source.el.addEventListener('scroll', this.onEditorScroll, { passive: true });
+            this.editorScrollEls.push(source.el);
+        }
     }
 
     private unbindEditorScroll(): void {
-        if (this.editorScrollEl) {
-            this.editorScrollEl.removeEventListener('scroll', this.onEditorScroll);
-            this.editorScrollEl = null;
+        for (const el of this.editorScrollEls) {
+            el.removeEventListener('scroll', this.onEditorScroll);
         }
+        this.editorScrollEls = [];
     }
 
     /** 同一帧内只执行一次同步 */
@@ -369,11 +461,4 @@ export class ScrollSyncController {
             run?.();
         });
     }
-}
-
-/** 拿不到 CodeMirror 完整视图时，退而取编辑器的滚动容器（.cm-scroller） */
-function findEditorScroller(editor: Editor): HTMLElement | null {
-    const cm = (editor as unknown as { cm?: { dom?: HTMLElement | null } }).cm;
-    const dom = cm?.dom ?? null;
-    return dom ? dom.querySelector<HTMLElement>('.cm-scroller') : null;
 }

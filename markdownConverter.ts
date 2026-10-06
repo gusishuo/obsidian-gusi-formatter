@@ -8,6 +8,22 @@ import { TFile, Vault } from 'obsidian';
 
 type RenderRule = (tokens: Token[], idx: number, options: Options, env: unknown, self: Renderer) => string;
 
+/** 转换选项 */
+export interface ConvertOptions {
+    /**
+     * 是否给每个顶层块级元素写入 `data-line`（源文件行号，从 0 开始）。
+     * 预览面板靠它做滚动同步；复制出去的 HTML 不需要，所以复制时不开启。
+     */
+    lineMarkers?: boolean;
+}
+
+/** render 的 env 里携带的内部配置 */
+interface ConvertEnv {
+    lineMarkers: boolean;
+    /** 去掉 frontmatter 造成的行号偏移 */
+    lineOffset: number;
+}
+
 /**
  * 把一段 HTML 字符串解析成可安全插入 DOM 的 DocumentFragment。
  * 不使用 innerHTML 赋值，避免污染与转义问题。
@@ -63,6 +79,20 @@ export class MarkdownConverter {
                 ? defaultImage(tokens, idx, options, env, self)
                 : self.renderToken(tokens, idx, options);
         };
+
+        // 给顶层块级元素打上源文件行号，供预览面板做滚动同步
+        this.md.core.ruler.push('gusi_line_markers', state => {
+            const env = state.env as Partial<ConvertEnv>;
+            if (!env || !env.lineMarkers) return true;
+            const offset = env.lineOffset ?? 0;
+            for (const token of state.tokens) {
+                if (token.level !== 0) continue;
+                if (token.nesting === -1) continue;
+                if (!token.map) continue;
+                token.attrSet('data-line', String(token.map[0] + offset));
+            }
+            return true;
+        });
     }
 
     /**
@@ -75,12 +105,16 @@ export class MarkdownConverter {
 
     /**
      * 将 Markdown 文本转为内联样式 HTML（去除 YAML 属性块，仅 section 包裹内容）。
+     * @param options.lineMarkers 预览面板需要行号锚点时开启；复制路径保持关闭，输出干净的 HTML。
      */
-    convert(markdown: string, css: string): string {
-        // 1. 去除 YAML frontmatter 属性块
-        const cleaned = markdown.replace(/^---[\s\S]*?---\s*/, '');
+    convert(markdown: string, css: string, options: ConvertOptions = {}): string {
+        // 1. 去除 YAML frontmatter 属性块，并记录被删掉的行数用于行号换算
+        const match = /^---[\s\S]*?---\s*/.exec(markdown);
+        const cleaned = match ? markdown.slice(match[0].length) : markdown;
+        const lineOffset = match ? (match[0].match(/\n/g) ?? []).length : 0;
         // 2. 转为 HTML
-        const rawHtml = this.md.render(cleaned);
+        const env: ConvertEnv = { lineMarkers: options.lineMarkers === true, lineOffset };
+        const rawHtml = this.md.render(cleaned, env);
         // 3. 用 <section> 包裹内容
         const htmlWithSection = `<section id="markdown2wechatHtml">${rawHtml}</section>`;
         // 4. 内联样式

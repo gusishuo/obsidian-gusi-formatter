@@ -64,6 +64,18 @@
   min-width: 120px;
 }
 
+/* 同步模式切换按钮：只显示图标 */
+.wechat-toolbar-btn:has(svg) {
+  padding: 4px 6px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.wechat-toolbar-btn.is-active {
+  color: var(--text-accent);
+}
+
 .wechat-toolbar-btn.close {
   font-size: 20px;
 }

@@ -1,19 +1,25 @@
 import { App, Modal, Notice, Plugin, PluginSettingTab, Setting, WorkspaceLeaf } from 'obsidian';
 import { ThemeManager, getAllThemes, isThemeNameUnique } from './themeManager';
 import { WechatHtmlPreviewView, VIEW_TYPE_WECHAT_PREVIEW, RIBBON_ICON_TEXT } from './previewPane';
+import {
+    SYNC_MODES,
+    SYNC_MODE_LABELS,
+    ScrollSyncMode,
+} from './scrollSync';
 import { Markdown2WechatHtmlSettings } from './types';
 
 // 默认设置：首个内置主题（themes/default.css 的 name 字段）
 const DEFAULT_SETTINGS: Markdown2WechatHtmlSettings = {
     defaultTheme: '默认主题',
     customThemes: {},
+    scrollSync: 'forward',
 };
 
 /**
  * 插件主类，负责插件生命周期、设置加载保存、主题管理、视图注册等。
  */
 export default class Markdown2WechatHtmlPlugin extends Plugin {
-    settings!: Markdown2WechatHtmlSettings;
+    declare settings: Markdown2WechatHtmlSettings;
     themeManager!: ThemeManager;
     private settingTab: Markdown2WechatHtmlSettingTab | null = null;
 
@@ -65,6 +71,10 @@ export default class Markdown2WechatHtmlPlugin extends Plugin {
     async loadSettings(): Promise<void> {
         const stored = (await this.loadData()) as Partial<Markdown2WechatHtmlSettings> | null;
         this.settings = Object.assign({}, DEFAULT_SETTINGS, stored ?? {});
+        // 旧版本数据没有 scrollSync 字段，或值非法时回落到默认模式
+        if (!SYNC_MODES.includes(this.settings.scrollSync)) {
+            this.settings.scrollSync = DEFAULT_SETTINGS.scrollSync;
+        }
     }
 
     /**
@@ -85,6 +95,18 @@ export default class Markdown2WechatHtmlPlugin extends Plugin {
             }
         }
         this.settingTab?.display();
+    }
+
+    /**
+     * 滚动同步模式变化后，让已打开的预览面板重新绑定或解绑编辑器滚动。
+     */
+    applyScrollSyncMode(): void {
+        for (const leaf of this.app.workspace.getLeavesOfType(VIEW_TYPE_WECHAT_PREVIEW)) {
+            const view = leaf.view;
+            if (view instanceof WechatHtmlPreviewView) {
+                view.applyScrollSyncMode();
+            }
+        }
     }
 }
 
@@ -133,6 +155,20 @@ class Markdown2WechatHtmlSettingTab extends PluginSettingTab {
                     });
             });
 
+        // 滚动同步模式
+        new Setting(containerEl)
+            .setName('Scroll sync')
+            .setDesc('Keep the editor and the preview panel scrolled to the same content')
+            .addDropdown(drop => {
+                for (const mode of SYNC_MODES) {
+                    drop.addOption(mode, SYNC_MODE_LABELS[mode]);
+                }
+                drop.setValue(this.plugin.settings.scrollSync);
+                drop.onChange(value => {
+                    void this.changeScrollSync(value as ScrollSyncMode);
+                });
+            });
+
         // 自定义主题管理
         new Setting(containerEl).setName('Custom themes').setHeading();
         const addRow = containerEl.createDiv({ cls: 'custom-theme-title-row' });
@@ -179,6 +215,16 @@ class Markdown2WechatHtmlSettingTab extends PluginSettingTab {
     private async applyTheme(): Promise<void> {
         await this.plugin.saveSettings();
         await this.plugin.refreshAllThemeSelectors();
+    }
+
+    /**
+     * 切换滚动同步模式并让所有预览面板立即生效。
+     */
+    private async changeScrollSync(mode: ScrollSyncMode): Promise<void> {
+        this.plugin.settings.scrollSync = mode;
+        await this.plugin.saveSettings();
+        this.plugin.applyScrollSyncMode();
+        new Notice(`Scroll sync: ${SYNC_MODE_LABELS[mode]}`);
     }
 
     /**

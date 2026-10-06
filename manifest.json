@@ -1,7 +1,7 @@
 {
   "id": "gusi-formatter",
   "name": "gusi formatter",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "minAppVersion": "1.7.2",
   "description": "把 Markdown 实时转成可直接粘贴进微信公众号的富文本 HTML，右侧即时预览、一键复制，内置四套中文排版主题，支持自定义主题.",
   "author": "Gus",

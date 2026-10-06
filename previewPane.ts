@@ -2,6 +2,13 @@ import { ItemView, Notice, TAbstractFile, WorkspaceLeaf, setIcon } from 'obsidia
 import type Markdown2WechatHtmlPlugin from './main';
 import { getAllThemes } from './themeManager';
 import { MarkdownConverter, htmlToFragment } from './markdownConverter';
+import {
+    SYNC_MODE_ICONS,
+    SYNC_MODE_LABELS,
+    ScrollSyncController,
+    ScrollSyncHost,
+    ScrollSyncMode,
+} from './scrollSync';
 
 export const VIEW_TYPE_WECHAT_PREVIEW = 'wechat-html-preview';
 export const RIBBON_ICON_TEXT = 'WeChat rich text preview';
@@ -9,12 +16,13 @@ export const RIBBON_ICON_TEXT = 'WeChat rich text preview';
 /**
  * 预览面板类，负责在 Obsidian 右侧显示实时 HTML 预览，支持主题切换、复制、关闭等。
  */
-export class WechatHtmlPreviewView extends ItemView {
+export class WechatHtmlPreviewView extends ItemView implements ScrollSyncHost {
     plugin: Markdown2WechatHtmlPlugin;
     converter: MarkdownConverter;
     previewEl!: HTMLElement;
     toolbarEl: HTMLElement | null = null;
     private lastActiveFilePath: string | null = null;
+    private scrollSync: ScrollSyncController;
 
     /**
      * 构造函数，初始化转换器等。
@@ -23,7 +31,22 @@ export class WechatHtmlPreviewView extends ItemView {
         super(leaf);
         this.plugin = plugin;
         this.converter = new MarkdownConverter();
+        this.scrollSync = new ScrollSyncController(this);
     }
+
+    /* ============ ScrollSyncHost 实现 ============ */
+
+    /** 供滚动同步控制器读取预览滚动容器 */
+    getPreviewEl(): HTMLElement | null {
+        return this.previewEl ?? null;
+    }
+
+    /** 供滚动同步控制器读取当前同步模式 */
+    getSyncMode(): ScrollSyncMode {
+        return this.plugin.settings.scrollSync;
+    }
+
+    /* ============================================ */
 
     /**
      * 返回视图类型标识。
@@ -70,7 +93,11 @@ export class WechatHtmlPreviewView extends ItemView {
 
         // 监听文档切换与内容变更
         this.registerEvent(this.app.workspace.on('active-leaf-change', this.onActiveLeafChange));
+        this.registerEvent(this.app.workspace.on('layout-change', this.onLayoutChange));
         this.registerEvent(this.app.vault.on('modify', this.onFileModify));
+
+        // 启动编辑区 ↔ 预览区滚动同步
+        this.scrollSync.attach();
     }
 
     /**
@@ -80,7 +107,15 @@ export class WechatHtmlPreviewView extends ItemView {
         const file = this.app.workspace.getActiveFile();
         if (!file || file.path === this.lastActiveFilePath) return;
         this.lastActiveFilePath = file.path;
-        void this.renderPreview(true); // 滚动条归零
+        this.scrollSync.rebindEditor();
+        void this.renderPreview(true);
+    };
+
+    /**
+     * 布局变化（切换标签页、开关面板）后重新绑定编辑器滚动容器。
+     */
+    private readonly onLayoutChange = (): void => {
+        this.scrollSync.rebindEditor();
     };
 
     /**
@@ -113,8 +148,16 @@ export class WechatHtmlPreviewView extends ItemView {
         };
         target.appendChild(left);
 
-        // 中间：复制按钮
+        // 中间：同步模式切换 + 复制按钮
         const center = createDiv({ cls: 'center' });
+        const syncBtn = center.createEl('button', { cls: 'wechat-toolbar-btn' });
+        const mode = this.plugin.settings.scrollSync;
+        setIcon(syncBtn, SYNC_MODE_ICONS[mode]);
+        syncBtn.setAttribute('aria-label', `Scroll sync: ${SYNC_MODE_LABELS[mode]}`);
+        syncBtn.toggleClass('is-active', mode !== 'off');
+        syncBtn.onclick = () => {
+            void this.cycleSyncMode();
+        };
         const copyBtn = center.createEl('button', { text: 'Copy HTML' });
         copyBtn.addClass('wechat-toolbar-btn');
         copyBtn.onclick = () => {
@@ -131,6 +174,26 @@ export class WechatHtmlPreviewView extends ItemView {
             this.app.workspace.detachLeavesOfType(VIEW_TYPE_WECHAT_PREVIEW);
         };
         target.appendChild(right);
+    }
+
+    /**
+     * 循环切换滚动同步模式：仅正向 → 双向 → 关闭。
+     */
+    private async cycleSyncMode(): Promise<void> {
+        const order: ScrollSyncMode[] = ['forward', 'both', 'off'];
+        const current = this.plugin.settings.scrollSync;
+        const next = order[(order.indexOf(current) + 1) % order.length];
+        this.plugin.settings.scrollSync = next;
+        await this.plugin.saveSettings();
+        this.scrollSync.applyMode();
+        this.renderToolbar();
+        new Notice(`Scroll sync: ${SYNC_MODE_LABELS[next]}`);
+    }
+
+    /** 供插件在设置页切换模式时调用 */
+    applyScrollSyncMode(): void {
+        this.scrollSync.applyMode();
+        this.renderToolbar();
     }
 
     /**
@@ -160,7 +223,8 @@ export class WechatHtmlPreviewView extends ItemView {
      * 渲染 HTML 预览内容。
      */
     private async renderPreview(resetScroll: boolean): Promise<void> {
-        // 记录刷新前的滚动位置
+        // 记录刷新前的位置：优先用行号锚点，锚点不可用时退回像素
+        const anchorLine = resetScroll ? null : this.scrollSync.captureAnchorLine();
         const prevScrollTop = this.previewEl ? this.previewEl.scrollTop : 0;
         // 清空旧内容
         this.previewEl.querySelectorAll('.wechat-html-content').forEach(el => el.remove());
@@ -173,13 +237,23 @@ export class WechatHtmlPreviewView extends ItemView {
         const theme = getAllThemes(this.plugin.settings).find(t => t.name === current);
         const css = theme ? theme.css : '';
         const markdown = await this.app.vault.read(file);
-        const html = this.converter.convert(markdown, css);
+        // 预览路径开启行号锚点，供滚动同步按内容对齐
+        const html = this.converter.convert(markdown, css, { lineMarkers: true });
 
         const contentDiv = this.previewEl.createDiv('wechat-html-content');
         contentDiv.appendChild(htmlToFragment(html));
 
-        // 决定滚动条行为
-        this.previewEl.scrollTop = resetScroll ? 0 : prevScrollTop;
+        if (resetScroll) {
+            this.previewEl.scrollTop = 0;
+            // 打开文档时跟随编辑器当前位置，而不是一律回到顶部
+            this.scrollSync.alignPreviewToEditor();
+            return;
+        }
+        if (anchorLine !== null) {
+            this.scrollSync.alignPreviewToLine(anchorLine);
+            return;
+        }
+        this.previewEl.scrollTop = prevScrollTop;
     }
 
     /**
@@ -198,7 +272,8 @@ export class WechatHtmlPreviewView extends ItemView {
     /**
      * 视图关闭时清理 UI。
      */
-    onClose(): void {
+    async onClose(): Promise<void> {
+        this.scrollSync.detach();
         this.previewEl?.remove();
     }
 }

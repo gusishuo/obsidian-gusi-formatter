@@ -8,6 +8,7 @@
 
 - **Real-time conversion** — Markdown → rich text HTML with all styles inlined (WeChat only accepts inline styles)
 - **Side pane preview** — see the real typography as you type, what you see is what you paste
+- **Scroll sync** — the preview follows the editor line by line, so scrolling to the bottom of your note takes the preview with it
 - **One-click copy** — paste straight into the WeChat editor, no reformatting
 - **Four built-in themes** — ready out of the box, no CSS pasting needed
 - **Custom themes** — add, edit and delete your own CSS themes in the settings, and export any theme's CSS with one click
@@ -35,6 +36,20 @@ All four themes are adapted for the WeChat editor: no pseudo-elements, pseudo-cl
 2. Click the eye icon in the left ribbon to open the preview pane
 3. Pick a theme from the toolbar dropdown
 4. Click "Copy HTML" and paste into the WeChat editor
+
+## Scroll sync
+
+The preview pane follows the editor automatically — scroll the note to the bottom and the preview goes with it. Alignment is line-based (each block carries its source line number), not percentage-based, so the preview lands on the same paragraph you are reading.
+
+The sync button on the toolbar (next to "Copy HTML") cycles through three modes:
+
+| Icon | Mode | Behaviour |
+|---|---|---|
+| → | Editor to preview only | Preview follows the editor. The default, and the one to keep. |
+| 🔗 | Both directions | Scrolling the preview also jumps the editor to the matching line. |
+| ⊘ | Off | No sync at all. |
+
+You can also set it in Settings → Gusi Formatter → Scroll sync.
 
 ## Custom themes
 
@@ -72,6 +87,7 @@ MIT License, see [LICENSE](./LICENSE).
 
 - **实时转换**：Markdown → 微信公众号可直接粘贴的富文本 HTML，样式全部内联（微信只认内联样式）
 - **侧栏预览**：右侧面板即时看到排版后的真实效果，所见即所得
+- **滚动同步**：编辑区滚到哪，预览区跟到哪，按行对齐而不是按百分比
 - **一键复制**：复制后直接粘进公众号后台，不用再调格式
 - **四套内置主题**：装完就有，不用自己粘贴 CSS
 - **自定义主题**：可以在设置里新增、编辑、删除自己的 CSS 主题，也能一键导出当前主题的 CSS
@@ -99,6 +115,20 @@ MIT License, see [LICENSE](./LICENSE).
 2. 点左侧栏的眼睛图标，打开排版预览面板
 3. 在工具栏的下拉里选主题
 4. 点「Copy HTML」，粘贴到公众号后台
+
+## 滚动同步
+
+预览面板会跟着编辑区走——笔记滚到底，预览也跟到底。对齐是按行号算的（每个块都带着自己的源文件行号），不是按百分比，所以预览停靠的位置就是你正在读的那一段。
+
+工具栏上（"Copy HTML" 旁边）的同步按钮可以循环切换三种模式：
+
+| 图标 | 模式 | 行为 |
+|---|---|---|
+| → | 仅编辑区到预览 | 预览跟随编辑区。默认模式，建议保持这个。 |
+| 🔗 | 双向 | 滚动预览时，编辑器也会跳到对应行。 |
+| ⊘ | 关闭 | 完全不同步。 |
+
+也可以在 设置 → Gusi Formatter → Scroll sync 里改。
 
 ## 自定义主题
 

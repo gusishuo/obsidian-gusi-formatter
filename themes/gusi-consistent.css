@@ -1,1 +1,839 @@
-@/Users/Zhuanz/sites/obsidian-gusi-formatter/themes/gusi-consistent.css
+/**
+ * name: 购物小票
+ * description: 购物小票 · 等宽字体 · 虚线边框 · 打印机质感
+ * note: 适配 gusi formatter 输出（section#markdown2wechatHtml）
+ */
+
+section#markdown2wechatHtml {
+  font-size: 16px;
+  color: #000000;
+  padding: 0 8px;
+  line-height: 1.6;
+  word-spacing: 0px;
+  letter-spacing: 0px;
+  word-break: break-word;
+  word-wrap: break-word;
+  text-align: left;
+  font-family: Optima-Regular, Optima, PingFangSC-light, PingFangTC-light, 'PingFang SC', 'Microsoft YaHei', '微软雅黑', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+}
+section#markdown2wechatHtml p {
+  font-size: 16px;
+  margin: 0;
+  line-height: 26px;
+  color: #000000;
+}
+section#markdown2wechatHtml h1, section#markdown2wechatHtml h2, section#markdown2wechatHtml h3, section#markdown2wechatHtml h4, section#markdown2wechatHtml h5, section#markdown2wechatHtml h6 {
+  margin-top: 30px;
+  margin-bottom: 15px;
+  padding: 0px;
+  font-weight: bold;
+  color: #000000;
+}
+section#markdown2wechatHtml h1 {
+  font-size: 24px;
+}
+section#markdown2wechatHtml h2 {
+  font-size: 22px;
+}
+section#markdown2wechatHtml h3 {
+  font-size: 20px;
+}
+section#markdown2wechatHtml h4 {
+  font-size: 18px;
+}
+section#markdown2wechatHtml h5 {
+  font-size: 16px;
+}
+section#markdown2wechatHtml h6 {
+  font-size: 16px;
+}
+section#markdown2wechatHtml h1 .prefix, section#markdown2wechatHtml h2 .prefix, section#markdown2wechatHtml h3 .prefix, section#markdown2wechatHtml h4 .prefix, section#markdown2wechatHtml h5 .prefix, section#markdown2wechatHtml h6 .prefix {
+  display: none;
+}
+section#markdown2wechatHtml h1 .suffix, section#markdown2wechatHtml h2 .suffix, section#markdown2wechatHtml h3 .suffix, section#markdown2wechatHtml h4 .suffix, section#markdown2wechatHtml h5 .suffix, section#markdown2wechatHtml h6 .suffix {
+  display: none;
+}
+section#markdown2wechatHtml ul, section#markdown2wechatHtml ol {
+  margin-top: 8px;
+  margin-bottom: 8px;
+  padding-left: 25px;
+  color: #000000;
+}
+section#markdown2wechatHtml ul {
+  list-style-type: disc;
+}
+section#markdown2wechatHtml ul ul {
+  list-style-type: square;
+}
+section#markdown2wechatHtml ol {
+  list-style-type: decimal;
+}
+section#markdown2wechatHtml li section {
+  margin-top: 5px;
+  margin-bottom: 5px;
+  line-height: 26px;
+  text-align: left;
+  color: #010101; 
+  font-weight: 500;
+}
+section#markdown2wechatHtml blockquote {
+  border: none;
+}
+section#markdown2wechatHtml .multiquote-1, section#markdown2wechatHtml blockquote {
+  display: block;
+  font-size: 0.9em;
+  overflow: auto;
+  overflow-scrolling: touch;
+  border-left: 3px solid rgba(0, 0, 0, 0.4);
+  background: rgba(0, 0, 0, 0.05);
+  color: #6a737d;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  padding-left: 20px;
+  padding-right: 10px;
+  margin-bottom: 20px;
+  margin-top: 20px;
+}
+section#markdown2wechatHtml .multiquote-1 p, section#markdown2wechatHtml blockquote p {
+  margin: 0px;
+  color: #000000;
+  line-height: 26px;
+}
+section#markdown2wechatHtml .multiquote-2 {
+  box-shadow: 1px 1px 10px rgba(0,0,0,0.2);
+  padding: 20px;
+  margin-bottom: 20px;
+  margin-top: 20px;
+}
+section#markdown2wechatHtml .multiquote-3 {
+  box-shadow: 1px 1px 10px rgba(0,0,0,0.2);
+  padding: 20px;
+  margin-bottom: 20px;
+  margin-top: 20px;
+}
+section#markdown2wechatHtml .multiquote-3 p {
+  text-align: center;
+}
+section#markdown2wechatHtml .multiquote-3 h3 {
+  text-align: center;
+}
+section#markdown2wechatHtml .table-of-contents a {
+  border: none;
+  color: #000000;
+  font-weight: normal;
+}
+section#markdown2wechatHtml a {
+  text-decoration: none;
+  color: #1e6bb8;
+  word-wrap: break-word;
+  font-weight: bold;
+  border-bottom: 1px solid #1e6bb8;
+}
+section#markdown2wechatHtml strong {
+  font-weight: bold;
+  color: #000000;
+}
+section#markdown2wechatHtml em {
+  font-style: italic;
+  color: #000000;
+}
+section#markdown2wechatHtml em strong {
+  font-weight: bold;
+  color: #000000;
+}
+section#markdown2wechatHtml del {
+  font-style: italic;
+  color: #000000;
+}
+section#markdown2wechatHtml u {
+  text-decoration: underline;
+  text-underline-offset: 0.18em;
+  text-decoration-thickness: 1px;
+}
+section#markdown2wechatHtml hr {
+  height: 1px;
+  margin: 0;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  border: none;
+  border-top: 1px solid black;
+}
+section#markdown2wechatHtml pre {
+  margin-top: 10px;
+  margin-bottom: 10px;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+section#markdown2wechatHtml pre.custom {
+  padding: 0;
+  border-radius: 6px;
+  overflow: hidden;
+  overflow-x: auto;
+}
+section#markdown2wechatHtml pre code {
+  display: block;
+  font-family: Operator Mono, Consolas, Monaco, Menlo, monospace;
+  border-radius: 0px;
+  font-size: 12px;
+  white-space: pre;
+  min-width: max-content;
+  -webkit-overflow-scrolling: touch;
+}
+section#markdown2wechatHtml pre code span {
+  line-height: 26px;
+}
+section#markdown2wechatHtml p code, section#markdown2wechatHtml li code {
+  font-size: 14px;
+  word-wrap: break-word;
+  padding: 2px 4px;
+  border-radius: 4px;
+  margin: 0 2px;
+  color: #1e6bb8;
+  background-color: rgba(27,31,35,.05);
+  font-family: Operator Mono, Consolas, Monaco, Menlo, monospace;
+  word-break: break-all;
+}
+section#markdown2wechatHtml img {
+  display: block;
+  margin: 0 auto;
+  max-width: 100%;
+}
+section#markdown2wechatHtml figure {
+  margin: 0;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+section#markdown2wechatHtml figcaption {
+  margin-top: 5px;
+  text-align: center;
+  color: #888;
+  font-size: 14px;
+}
+section#markdown2wechatHtml .table-container {
+  overflow-x: auto;
+}
+section#markdown2wechatHtml table {
+  display: table;
+  text-align: left;
+}
+section#markdown2wechatHtml tbody {
+  border: 0;
+}
+section#markdown2wechatHtml table tr {
+  border: 0;
+  border-top: 1px solid #ccc;
+  background-color: #ffffff;
+}
+section#markdown2wechatHtml table tr:nth-child(2n) {
+  background-color: #F8F8F8;
+}
+section#markdown2wechatHtml table tr th, section#markdown2wechatHtml table tr td {
+  font-size: 16px;
+  border: 1px solid #ccc;
+  padding: 5px 10px;
+  text-align: left;
+}
+section#markdown2wechatHtml table tr th {
+  font-weight: bold;
+  background-color: #f0f0f0;
+}
+section#markdown2wechatHtml table tr th:nth-of-type(n), section#markdown2wechatHtml table tr td:nth-of-type(n) {
+  min-width:85px;
+}
+section#markdown2wechatHtml .footnote-word {
+  color: #1e6bb8;
+  font-weight: bold;
+}
+section#markdown2wechatHtml .footnote-ref {
+  color: #1e6bb8;
+  font-weight: bold;
+}
+section#markdown2wechatHtml .footnote-item {
+  display: flex;
+}
+section#markdown2wechatHtml .footnote-num {
+  display: inline;
+  width: 10%; 
+  background: none;
+  font-size: 80%;
+  opacity: 0.6;
+  line-height: 26px;
+  font-family: ptima-Regular, Optima, PingFangSC-light, PingFangTC-light, 'PingFang SC', Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+}
+section#markdown2wechatHtml .footnote-item p {
+  display: inline;
+  font-size: 14px;
+  width: 90%;
+  padding: 0px;
+  margin: 0;
+  line-height: 26px;
+  color: #000000;
+  word-break:break-all;
+  width: calc(100%-50)
+}
+section#markdown2wechatHtml sub, sup {
+  line-height: 0;
+}
+section#markdown2wechatHtml .footnotes-sep:before {
+  content: "参考资料";
+  display: block;
+}
+section#markdown2wechatHtml .block-equation {
+  display:block;
+  text-align: center;
+  overflow: auto;
+  display: block;
+  -webkit-overflow-scrolling: touch;
+}
+section#markdown2wechatHtml .block-equation > svg {
+  max-width: 300% !important;
+  -webkit-overflow-scrolling: touch;
+}
+section#markdown2wechatHtml .inline-equation {
+}
+section#markdown2wechatHtml .inline-equation > svg {
+}
+section#markdown2wechatHtml .imageflow-layer1 {
+  margin-top: 1em;
+  margin-bottom: 0.5em;
+  white-space: normal;
+  border: 0px none;
+  padding: 0px;
+  overflow: hidden;
+}
+section#markdown2wechatHtml .imageflow-layer2 {
+  white-space: nowrap;
+  width: 100%;
+  overflow-x: scroll;
+}
+section#markdown2wechatHtml .imageflow-layer3 {
+  display: inline-block;
+  word-wrap: break-word;
+  white-space: normal;
+  vertical-align: top;
+  width: 80%;
+  margin-right: 10px;
+  flex-shrink: 0;
+}
+section#markdown2wechatHtml .imageflow-img {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-height: 300px;
+  object-fit: contain;
+  border-radius: 4px;
+}
+section#markdown2wechatHtml .imageflow-caption {
+  text-align: center;
+  margin-top: 0px;
+  padding-top: 0px;
+  color: #888;
+}
+section#markdown2wechatHtml .nice-suffix-juejin-container {
+  margin-top: 20px !important;
+}
+section#markdown2wechatHtml figure a {
+  border: none;
+}
+section#markdown2wechatHtml figure a img {
+  margin: 0px;
+}
+section#markdown2wechatHtml figure {
+  display:flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+section#markdown2wechatHtml figure a {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+section#markdown2wechatHtml figure a + figcaption {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  margin-top: -35px;
+  background: rgba(0,0,0,0.7);
+  color: #ffffff;
+  line-height: 35px;
+  z-index: 20;
+}
+section#markdown2wechatHtml .callout {
+  margin: 24px 0;
+  padding: 18px 20px;
+  border-radius: 16px;
+  border: 1px solid #e2e8f0;
+  background: #ffffff;
+  box-shadow: 0 12px 25px rgba(15, 23, 42, 0.08);
+}
+section#markdown2wechatHtml .callout-title {
+  font-weight: 600;
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 0;
+  letter-spacing: 0.05em;
+}
+section#markdown2wechatHtml .callout-icon { margin-right: 8px;
+  font-size: 18px;
+}
+section#markdown2wechatHtml .callout-note { border-left: 4px solid #6366f1; background: #f5f5ff; }
+section#markdown2wechatHtml .callout-tip { border-left: 4px solid #10b981; background: #ecfdf5; }
+section#markdown2wechatHtml .callout-important { border-left: 4px solid #8b5cf6; background: #f5f3ff; }
+section#markdown2wechatHtml .callout-warning { border-left: 4px solid #f59e0b; background: #fffbeb; }
+section#markdown2wechatHtml .callout-caution { border-left: 4px solid #ef4444; background: #fff5f5; }
+section#markdown2wechatHtml .task-list-item {
+  list-style: none;
+  margin-left: -1.2em;
+  margin-bottom: 6px;
+  display: flex;
+  gap: 0;
+  align-items: flex-start;
+}
+section#markdown2wechatHtml .task-list-item input[type='checkbox'] {
+  margin-top: 4px;
+  pointer-events: none;
+}
+section#markdown2wechatHtml {
+    padding: 5px 20px;
+    max-width: 677px;
+    margin: 0 auto;
+    
+    font-family: "Courier New", "SimSun", "Songti SC", monospace;
+    color: #111;
+    background-color: transparent;
+    
+    
+    border-top: 5px dashed #111;
+    border-bottom: 5px dashed #111;
+    word-break: break-word;
+}
+section#markdown2wechatHtml p {
+    margin: 18px 0;
+    line-height: 1.6;
+    text-align: justify;
+    color: #222;
+    font-size: 15px;
+}
+section#markdown2wechatHtml h1 {
+    margin: 40px 0 30px;
+    text-align: center;
+    border-top: 2px dashed #000;
+    border-bottom: 2px dashed #000;
+    padding: 15px 0;
+}
+section#markdown2wechatHtml h1 .content, section#markdown2wechatHtml h1 {
+    font-size: 26px;
+    font-weight: 900;
+    color: #000;
+    letter-spacing: 2px;
+    display: block;
+    
+    border: none;
+    
+}
+section#markdown2wechatHtml h1 .prefix, section#markdown2wechatHtml h1 .suffix {
+    display: none;
+}
+section#markdown2wechatHtml h2 {
+    margin: 30px 0 20px;
+    text-align: center;
+}
+section#markdown2wechatHtml h2 .content, section#markdown2wechatHtml h2 {
+    display: block;
+    font-size: 18px;
+    font-weight: bold;
+    color: #fff;
+    
+    background: #000;
+    
+    padding: 8px;
+}
+section#markdown2wechatHtml h2 .prefix, section#markdown2wechatHtml h2 .suffix {
+    display: none;
+}
+section#markdown2wechatHtml h3 {
+    margin: 25px 0 10px;
+}
+section#markdown2wechatHtml h3 .content, section#markdown2wechatHtml h3 {
+    font-size: 16px;
+    font-weight: bold;
+    border-bottom: 2px solid #000;
+    padding-bottom: 2px;
+    display: inline-block;
+}
+section#markdown2wechatHtml h3 .prefix, section#markdown2wechatHtml h3 .suffix {
+    display: none;
+}
+section#markdown2wechatHtml h4 {
+    margin: 20px 0 10px;
+    text-align: left;
+}
+section#markdown2wechatHtml h4 .content, section#markdown2wechatHtml h4 {
+    font-size: 16px;
+    font-weight: bold;
+    color: #000;
+    text-decoration: underline;
+}
+section#markdown2wechatHtml h4 .prefix, section#markdown2wechatHtml h4 .suffix {
+    display: none;
+}
+section#markdown2wechatHtml .multiquote-1, section#markdown2wechatHtml blockquote {
+    margin: 25px 0;
+    padding: 15px;
+    border: 1px dotted #000;
+    
+    font-size: 14px;
+    text-align: left;
+    background: #f8f8f8;
+}
+section#markdown2wechatHtml .multiquote-1 p, section#markdown2wechatHtml blockquote p {
+    font-family: monospace;
+    color: #444;
+}
+section#markdown2wechatHtml .multiquote-2 {
+    margin: 22px 0;
+    padding: 13px;
+    border: 1px dashed #000;
+    background: #fafafa;
+}
+section#markdown2wechatHtml .multiquote-2 p {
+    font-family: monospace;
+    color: #444;
+}
+section#markdown2wechatHtml .multiquote-3 {
+    margin: 20px 0;
+    padding: 11px;
+    border: 1px dotted #666;
+    background: #fcfcfc;
+}
+section#markdown2wechatHtml .multiquote-3 p {
+    font-family: monospace;
+    color: #444;
+}
+section#markdown2wechatHtml ul {
+    list-style: none;
+    padding-left: 10px;
+    margin: 20px 0;
+}
+section#markdown2wechatHtml ul li {
+    margin-bottom: 8px;
+    border-bottom: 1px dotted #ccc;
+    
+    padding-bottom: 4px;
+}
+section#markdown2wechatHtml ul li::before {
+    content: "[*] ";
+    
+    font-weight: bold;
+    margin-right: 5px;
+}
+section#markdown2wechatHtml ol {
+    list-style: decimal;
+    padding-left: 25px;
+    margin: 20px 0;
+    font-weight: bold;
+}
+section#markdown2wechatHtml li section {
+    font-weight: normal;
+    color: #222;
+}
+section#markdown2wechatHtml ul ul {
+    list-style: none;
+    margin-top: 6px;
+}
+section#markdown2wechatHtml ul ul li::before {
+    content: "[-] ";
+    font-weight: bold;
+}
+section#markdown2wechatHtml ol ol {
+    list-style-type: lower-alpha;
+}
+section#markdown2wechatHtml a {
+    color: #000;
+    text-decoration: underline;
+    font-weight: bold;
+}
+section#markdown2wechatHtml strong {
+    font-weight: 900;
+    background: #ddd;
+    
+    padding: 0 4px;
+}
+section#markdown2wechatHtml em {
+    font-style: italic;
+    color: #000;
+}
+section#markdown2wechatHtml em strong {
+    font-weight: 900;
+    font-style: italic;
+}
+section#markdown2wechatHtml mark {
+    background: #ddd;
+    color: #000;
+    padding: 0 4px;
+}
+section#markdown2wechatHtml del {
+    text-decoration: line-through;
+    color: #666;
+}
+section#markdown2wechatHtml hr {
+    margin: 30px 0;
+    border: none;
+    border-top: 2px dashed #000;
+}
+section#markdown2wechatHtml p code, section#markdown2wechatHtml li code {
+    background: #000;
+    color: #fff;
+    font-family: monospace;
+    padding: 2px 6px;
+    margin: 0 4px;
+    font-size: 14px;
+    border-radius: 0;
+}
+section#markdown2wechatHtml img {
+    display: block;
+    margin: 30px auto;
+    width: 100%;
+    border: 2px dashed #000;
+    padding: 8px;
+    background: #fff;
+}
+section#markdown2wechatHtml figcaption {
+    margin-top: 8px;
+    text-align: center;
+    color: #000;
+    font-size: 13px;
+    font-family: monospace;
+    border-top: 1px dashed #000;
+    padding-top: 6px;
+}
+section#markdown2wechatHtml pre code.hljs {
+    background: #f4f4f4 !important;
+    
+    
+    border: 2px dashed #000 !important;
+    
+    border-radius: 0 !important;
+    
+    box-shadow: none !important;
+    
+    font-family: "Courier New", monospace;
+    font-size: 13px;
+    padding: 15px;
+    line-height: 1.5;
+}
+section#markdown2wechatHtml pre code:not(.hljs) {
+    color: #000 !important;
+    background: #f4f4f4 !important;
+    border: 2px dashed #000 !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+}
+section#markdown2wechatHtml pre code::before {
+    content: "" !important;
+    display: none !important;
+}
+section#markdown2wechatHtml table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+    font-size: 14px;
+    font-family: monospace;
+}
+section#markdown2wechatHtml table tr th {
+    border-bottom: 2px dashed #000;
+    padding: 8px 5px;
+    text-align: right;
+    font-weight: 900;
+    text-transform: uppercase;
+}
+section#markdown2wechatHtml table tr th:first-child {
+    text-align: left;
+}
+section#markdown2wechatHtml table tr td {
+    border-bottom: 1px dotted #000;
+    padding: 8px 5px;
+    text-align: right;
+    color: #000;
+}
+section#markdown2wechatHtml table tr td:first-child {
+    text-align: left;
+}
+section#markdown2wechatHtml .footnote-word, section#markdown2wechatHtml .footnote-ref {
+    color: #000;
+    text-decoration: underline;
+}
+section#markdown2wechatHtml .footnotes-sep {
+    border-top: 2px dashed #000;
+    margin-top: 30px;
+    padding-top: 15px;
+}
+section#markdown2wechatHtml .footnote-num {
+    font-weight: bold;
+    color: #000;
+    margin-right: 4px;
+}
+section#markdown2wechatHtml .footnote-item p {
+    color: #444;
+    font-size: 13px;
+    font-family: monospace;
+}
+section#markdown2wechatHtml .callout {
+    margin: 25px 0;
+    padding: 15px;
+    border: 1px dotted #000;
+    background: #f8f8f8;
+    border-radius: 0;
+}
+section#markdown2wechatHtml .callout-title {
+    font-weight: bold;
+    margin-bottom: 8px;
+    color: #000;
+    font-family: monospace;
+    text-transform: uppercase;
+    font-size: 14px;
+}
+section#markdown2wechatHtml .callout-icon { margin-right: 8px;
+    margin-right: 6px;
+}
+section#markdown2wechatHtml .callout-note { border-left: 2px dashed #000; }
+section#markdown2wechatHtml .callout-tip { border-left: 2px dashed #000; }
+section#markdown2wechatHtml .callout-important { border-left: 2px dashed #000; }
+section#markdown2wechatHtml .callout-warning { border-left: 2px dashed #000; }
+section#markdown2wechatHtml .callout-caution { border-left: 2px dashed #000; }
+section#markdown2wechatHtml .imageflow-layer1 {
+  margin-top: 1em;
+  margin-bottom: 0.5em;
+  
+  border: 0px none;
+  padding: 0px;
+  overflow: hidden;
+}
+section#markdown2wechatHtml .imageflow-layer2 {
+  white-space: nowrap;
+  width: 100%;
+  overflow-x: scroll;
+}
+section#markdown2wechatHtml .imageflow-layer3 {
+  display: inline-block;
+  word-wrap: break-word;
+  white-space: normal;
+  vertical-align: top;
+  width: 80%;
+  margin-right: 10px;
+  flex-shrink: 0;
+}
+section#markdown2wechatHtml .imageflow-img {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-height: 300px;
+  object-fit: contain;
+  border-radius: 4px;
+}
+section#markdown2wechatHtml .imageflow-caption {
+  text-align: center;
+  margin-top: 0px;
+  padding-top: 0px;
+  color: #888;
+}
+section#markdown2wechatHtml .hljs {
+  display: block;
+  overflow-x: auto;
+  padding: 16px;
+  color: #333;
+  background: #f8f8f8;
+}
+section#markdown2wechatHtml .hljs-comment, section#markdown2wechatHtml .hljs-quote {
+  color: #998;
+  font-style: italic;
+}
+section#markdown2wechatHtml .hljs-keyword, section#markdown2wechatHtml .hljs-selector-tag, section#markdown2wechatHtml .hljs-subst {
+  color: #333;
+  font-weight: bold;
+}
+section#markdown2wechatHtml .hljs-number, section#markdown2wechatHtml .hljs-literal, section#markdown2wechatHtml .hljs-variable, section#markdown2wechatHtml .hljs-template-variable, section#markdown2wechatHtml .hljs-tag .hljs-attr {
+  color: #008080;
+}
+section#markdown2wechatHtml .hljs-string, section#markdown2wechatHtml .hljs-doctag {
+  color: #d14;
+}
+section#markdown2wechatHtml .hljs-title, section#markdown2wechatHtml .hljs-section, section#markdown2wechatHtml .hljs-selector-id {
+  color: #900;
+  font-weight: bold;
+}
+section#markdown2wechatHtml .hljs-subst {
+  font-weight: normal;
+}
+section#markdown2wechatHtml .hljs-type, section#markdown2wechatHtml .hljs-class .hljs-title {
+  color: #458;
+  font-weight: bold;
+}
+section#markdown2wechatHtml .hljs-tag, section#markdown2wechatHtml .hljs-name, section#markdown2wechatHtml .hljs-attribute {
+  color: #000080;
+  font-weight: normal;
+}
+section#markdown2wechatHtml .hljs-regexp, section#markdown2wechatHtml .hljs-link {
+  color: #009926;
+}
+section#markdown2wechatHtml .hljs-symbol, section#markdown2wechatHtml .hljs-bullet {
+  color: #990073;
+}
+section#markdown2wechatHtml .hljs-built_in, section#markdown2wechatHtml .hljs-builtin-name {
+  color: #0086b3;
+}
+section#markdown2wechatHtml .hljs-meta {
+  color: #999;
+  font-weight: bold;
+}
+section#markdown2wechatHtml .hljs-deletion {
+  background: #fdd;
+}
+section#markdown2wechatHtml .hljs-addition {
+  background: #dfd;
+}
+section#markdown2wechatHtml .hljs-emphasis {
+  font-style: italic;
+}
+section#markdown2wechatHtml .hljs-strong {
+  font-weight: bold;
+}
+section#markdown2wechatHtml .imageflow-layer1 {
+  margin-top: 1em;
+  margin-bottom: 0.5em;
+  
+  border: 0px none;
+  padding: 0px;
+  overflow: hidden;
+}
+section#markdown2wechatHtml .imageflow-layer2 {
+  white-space: nowrap;
+  width: 100%;
+  overflow-x: scroll;
+}
+section#markdown2wechatHtml .imageflow-layer3 {
+  display: inline-block;
+  word-wrap: break-word;
+  white-space: normal;
+  vertical-align: top;
+  width: 80%;
+  margin-right: 10px;
+  flex-shrink: 0;
+}
+section#markdown2wechatHtml .imageflow-img {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-height: 300px;
+  object-fit: contain;
+  border-radius: 4px;
+}
+section#markdown2wechatHtml .imageflow-caption {
+  text-align: center;
+  margin-top: 0px;
+  padding-top: 0px;
+  color: #888;
+}

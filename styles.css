@@ -34,6 +34,7 @@
 
 /* =====================
    工具栏与顶部操作区
+   布局：左侧主题下拉撑满，右侧一组操作按钮
    ===================== */
 .wechat-nav-header {
   padding: 0 !important;
@@ -42,63 +43,69 @@
 .wechat-html-toolbar {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  padding: 8px 16px;
+  gap: 8px;
+  padding: 6px 10px;
 }
 
-.wechat-html-toolbar .left,
-.wechat-html-toolbar .center,
-.wechat-html-toolbar .right {
-  flex: 1;
+.wechat-html-toolbar .left {
+  flex: 1 1 auto;
+  min-width: 0;
   display: flex;
   align-items: center;
 }
-.wechat-html-toolbar .center {
-  justify-content: center;
-}
+
 .wechat-html-toolbar .right {
-  justify-content: flex-end;
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 2px;
 }
 
 .wechat-theme-select {
+  width: 100%;
+  max-width: 240px;
   min-width: 120px;
+  height: 28px;
 }
 
-/* 同步开关按钮：只显示图标 */
-.wechat-toolbar-btn:has(svg) {
-  padding: 4px 6px;
+/* 图标按钮：扁平透明底，统一 28px，hover 才浮出底色 */
+.wechat-icon-btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  border: none;
+  border-radius: 6px;
+  background: transparent;
+  box-shadow: none;
+  color: var(--text-muted);
+  cursor: pointer;
 }
 
-/* 开：强调色；关：灰掉，一眼看出状态 */
-.wechat-toolbar-btn:not(.is-off) {
+.wechat-icon-btn:hover {
+  background: var(--background-modifier-hover);
+  color: var(--text-normal);
+}
+
+/* 同步开关：开 = 强调色，关 = 灰淡，一眼看出状态 */
+.wechat-sync-btn:not(.is-off) {
   color: var(--text-accent);
 }
 
-.wechat-toolbar-btn.is-off {
+.wechat-sync-btn.is-off {
   color: var(--text-faint);
   opacity: 0.65;
 }
 
-.wechat-toolbar-btn.close {
-  font-size: 20px;
-}
-
-/* 复制到公众号：微信绿描边按钮，跟 Copy HTML / 同步开关一眼区分 */
-.wechat-toolbar-btn.wechat-copy-to-wechat {
-  color: #07c160;
-  border: 1px solid #07c160;
+/* Copy HTML：唯一保留底色的主操作按钮，与图标按钮拉开层次 */
+.wechat-copy-btn {
+  height: 28px;
+  padding: 0 12px;
+  margin-left: 4px;
   border-radius: 6px;
-  background: transparent;
   box-shadow: none;
-}
-
-.wechat-toolbar-btn.wechat-copy-to-wechat:hover {
-  color: #ffffff;
-  background: #07c160;
-  border-color: #07c160;
 }
 
 /* =====================

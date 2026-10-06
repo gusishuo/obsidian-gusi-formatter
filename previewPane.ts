@@ -133,14 +133,14 @@ export class WechatHtmlPreviewView extends ItemView implements ScrollSyncHost {
     };
 
     /**
-     * 渲染顶部工具栏（主题选择、复制、关闭）。
+     * 渲染顶部工具栏（主题选择、同步开关、复制、关闭）。
      */
     renderToolbar(toolbar?: HTMLElement): void {
         const target = toolbar ?? this.toolbarEl;
         if (!target) return;
         target.empty();
 
-        // 左侧：主题选择
+        // 左侧：主题选择，占满剩余空间
         const left = createDiv({ cls: 'left' });
         const themeSelect = left.createEl('select');
         themeSelect.className = 'wechat-theme-select dropdown';
@@ -153,10 +153,11 @@ export class WechatHtmlPreviewView extends ItemView implements ScrollSyncHost {
         };
         target.appendChild(left);
 
-        // 中间：同步开关 + 复制按钮
-        const center = createDiv({ cls: 'center' });
+        // 右侧：同步开关、复制到公众号、Copy HTML、关闭
+        const right = createDiv({ cls: 'right' });
+
         const syncOn = this.scrollSync.isEnabled();
-        const syncBtn = center.createEl('button', { cls: 'wechat-toolbar-btn' });
+        const syncBtn = right.createEl('button', { cls: 'wechat-icon-btn wechat-sync-btn' });
         setIcon(syncBtn, syncOn ? SYNC_ON_ICON : SYNC_OFF_ICON);
         syncBtn.setAttribute('aria-label', syncOn ? SYNC_ON_LABEL : SYNC_OFF_LABEL);
         setTooltip(syncBtn, syncOn ? `${SYNC_ON_LABEL} — ${SYNC_MODE_LABELS[this.plugin.settings.scrollSync]}` : SYNC_OFF_LABEL);
@@ -164,29 +165,29 @@ export class WechatHtmlPreviewView extends ItemView implements ScrollSyncHost {
         syncBtn.onclick = () => {
             void this.toggleScrollSync();
         };
-        const copyBtn = center.createEl('button', { text: 'Copy HTML' });
-        copyBtn.addClass('wechat-toolbar-btn');
-        copyBtn.onclick = () => {
-            void this.copyHtml();
-        };
+
         // 复制到公众号：以富文本形式写入剪贴板，直接粘进公众号编辑器即可保留排版
-        const wechatBtn = center.createEl('button', { cls: 'wechat-toolbar-btn wechat-copy-to-wechat' });
+        const wechatBtn = right.createEl('button', { cls: 'wechat-icon-btn' });
         setIcon(wechatBtn, 'send');
         wechatBtn.setAttribute('aria-label', '复制到公众号');
         setTooltip(wechatBtn, '复制到公众号');
         wechatBtn.onclick = () => {
             void this.copyToWechat();
         };
-        target.appendChild(center);
 
-        // 右侧：关闭按钮
-        const right = createDiv({ cls: 'right' });
-        const closeBtn = right.createEl('button', { cls: 'close' });
+        const copyBtn = right.createEl('button', { cls: 'wechat-copy-btn', text: 'Copy HTML' });
+        copyBtn.onclick = () => {
+            void this.copyHtml();
+        };
+
+        const closeBtn = right.createEl('button', { cls: 'wechat-icon-btn' });
         setIcon(closeBtn, 'x');
         closeBtn.setAttribute('aria-label', 'Close preview');
+        setTooltip(closeBtn, 'Close preview');
         closeBtn.onclick = () => {
             this.app.workspace.detachLeavesOfType(VIEW_TYPE_WECHAT_PREVIEW);
         };
+
         target.appendChild(right);
     }
 

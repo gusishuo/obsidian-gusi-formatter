@@ -16,17 +16,12 @@ export const SYNC_MODE_LABELS: Record<ScrollSyncMode, string> = {
     off: 'Off',
 };
 
-export const SYNC_MODE_ICONS: Record<ScrollSyncMode, string> = {
-    forward: 'arrow-right',
-    both: 'link',
-    off: 'unlink',
-};
+/** 开关按钮上显示的图标：开 = 联动链，关 = 断开的链 */
+export const SYNC_ON_ICON = 'link';
+export const SYNC_OFF_ICON = 'unlink';
 
-export const SYNC_MODE_DESCRIPTIONS: Record<ScrollSyncMode, string> = {
-    forward: 'Preview follows the editor',
-    both: 'Preview follows the editor, and the editor follows the preview',
-    off: 'Do not sync scrolling',
-};
+export const SYNC_ON_LABEL = 'Scroll sync on';
+export const SYNC_OFF_LABEL = 'Scroll sync off';
 
 /** CodeMirror 6 视图上本插件实际用到的最小接口 */
 interface CmViewLike {
@@ -127,6 +122,11 @@ export class ScrollSyncController {
         } else {
             this.bindEditorScroll();
         }
+    }
+
+    /** 同步是否处于开启状态（`off` 之外都算开） */
+    isEnabled(): boolean {
+        return this.host.getSyncMode() !== 'off';
     }
 
     /**

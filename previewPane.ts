@@ -1,10 +1,13 @@
-import { ItemView, Notice, TAbstractFile, WorkspaceLeaf, setIcon } from 'obsidian';
+import { ItemView, Notice, TAbstractFile, WorkspaceLeaf, setIcon, setTooltip } from 'obsidian';
 import type Markdown2WechatHtmlPlugin from './main';
 import { getAllThemes } from './themeManager';
 import { MarkdownConverter, htmlToFragment } from './markdownConverter';
 import {
-    SYNC_MODE_ICONS,
     SYNC_MODE_LABELS,
+    SYNC_OFF_ICON,
+    SYNC_OFF_LABEL,
+    SYNC_ON_ICON,
+    SYNC_ON_LABEL,
     ScrollSyncController,
     ScrollSyncHost,
     ScrollSyncMode,
@@ -22,6 +25,8 @@ export class WechatHtmlPreviewView extends ItemView implements ScrollSyncHost {
     previewEl!: HTMLElement;
     toolbarEl: HTMLElement | null = null;
     private lastActiveFilePath: string | null = null;
+    /** 关掉同步前的方向，重新打开时恢复 */
+    private lastEnabledSyncMode: ScrollSyncMode = 'forward';
     private scrollSync: ScrollSyncController;
 
     /**
@@ -148,15 +153,16 @@ export class WechatHtmlPreviewView extends ItemView implements ScrollSyncHost {
         };
         target.appendChild(left);
 
-        // 中间：同步模式切换 + 复制按钮
+        // 中间：同步开关 + 复制按钮
         const center = createDiv({ cls: 'center' });
+        const syncOn = this.scrollSync.isEnabled();
         const syncBtn = center.createEl('button', { cls: 'wechat-toolbar-btn' });
-        const mode = this.plugin.settings.scrollSync;
-        setIcon(syncBtn, SYNC_MODE_ICONS[mode]);
-        syncBtn.setAttribute('aria-label', `Scroll sync: ${SYNC_MODE_LABELS[mode]}`);
-        syncBtn.toggleClass('is-active', mode !== 'off');
+        setIcon(syncBtn, syncOn ? SYNC_ON_ICON : SYNC_OFF_ICON);
+        syncBtn.setAttribute('aria-label', syncOn ? SYNC_ON_LABEL : SYNC_OFF_LABEL);
+        setTooltip(syncBtn, syncOn ? `${SYNC_ON_LABEL} — ${SYNC_MODE_LABELS[this.plugin.settings.scrollSync]}` : SYNC_OFF_LABEL);
+        syncBtn.toggleClass('is-off', !syncOn);
         syncBtn.onclick = () => {
-            void this.cycleSyncMode();
+            void this.toggleScrollSync();
         };
         const copyBtn = center.createEl('button', { text: 'Copy HTML' });
         copyBtn.addClass('wechat-toolbar-btn');
@@ -177,21 +183,28 @@ export class WechatHtmlPreviewView extends ItemView implements ScrollSyncHost {
     }
 
     /**
-     * 循环切换滚动同步模式：仅正向 → 双向 → 关闭。
+     * 一键开关滚动同步：关掉时记住原方向，再打开时恢复。
      */
-    private async cycleSyncMode(): Promise<void> {
-        const order: ScrollSyncMode[] = ['forward', 'both', 'off'];
+    private async toggleScrollSync(): Promise<void> {
         const current = this.plugin.settings.scrollSync;
-        const next = order[(order.indexOf(current) + 1) % order.length];
+        let next: ScrollSyncMode;
+        if (current === 'off') {
+            next = this.lastEnabledSyncMode;
+        } else {
+            this.lastEnabledSyncMode = current;
+            next = 'off';
+        }
         this.plugin.settings.scrollSync = next;
         await this.plugin.saveSettings();
         this.scrollSync.applyMode();
         this.renderToolbar();
-        new Notice(`Scroll sync: ${SYNC_MODE_LABELS[next]}`);
+        new Notice(next === 'off' ? 'Scroll sync off' : `Scroll sync on (${SYNC_MODE_LABELS[next]})`);
     }
 
     /** 供插件在设置页切换模式时调用 */
     applyScrollSyncMode(): void {
+        const mode = this.plugin.settings.scrollSync;
+        if (mode !== 'off') this.lastEnabledSyncMode = mode;
         this.scrollSync.applyMode();
         this.renderToolbar();
     }

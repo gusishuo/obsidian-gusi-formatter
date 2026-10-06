@@ -64,7 +64,7 @@
   min-width: 120px;
 }
 
-/* 同步模式切换按钮：只显示图标 */
+/* 同步开关按钮：只显示图标 */
 .wechat-toolbar-btn:has(svg) {
   padding: 4px 6px;
   display: inline-flex;
@@ -72,8 +72,14 @@
   justify-content: center;
 }
 
-.wechat-toolbar-btn.is-active {
+/* 开：强调色；关：灰掉，一眼看出状态 */
+.wechat-toolbar-btn:not(.is-off) {
   color: var(--text-accent);
+}
+
+.wechat-toolbar-btn.is-off {
+  color: var(--text-faint);
+  opacity: 0.65;
 }
 
 .wechat-toolbar-btn.close {

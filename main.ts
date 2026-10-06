@@ -155,10 +155,10 @@ class Markdown2WechatHtmlSettingTab extends PluginSettingTab {
                     });
             });
 
-        // 滚动同步模式
+        // 滚动同步方向（开关在预览面板工具栏）
         new Setting(containerEl)
-            .setName('Scroll sync')
-            .setDesc('Keep the editor and the preview panel scrolled to the same content')
+            .setName('Scroll sync direction')
+            .setDesc('Which side follows which. The toolbar button turns scrolling sync on and off.')
             .addDropdown(drop => {
                 for (const mode of SYNC_MODES) {
                     drop.addOption(mode, SYNC_MODE_LABELS[mode]);
@@ -224,7 +224,7 @@ class Markdown2WechatHtmlSettingTab extends PluginSettingTab {
         this.plugin.settings.scrollSync = mode;
         await this.plugin.saveSettings();
         this.plugin.applyScrollSyncMode();
-        new Notice(`Scroll sync: ${SYNC_MODE_LABELS[mode]}`);
+        new Notice(mode === 'off' ? 'Scroll sync off' : `Scroll sync on — ${SYNC_MODE_LABELS[mode]}`);
     }
 
     /**

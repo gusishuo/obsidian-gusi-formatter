@@ -41,15 +41,12 @@ All four themes are adapted for the WeChat editor: no pseudo-elements, pseudo-cl
 
 The preview pane follows the editor automatically — scroll the note to the bottom and the preview goes with it. Alignment is line-based (each block carries its source line number), not percentage-based, so the preview lands on the same paragraph you are reading.
 
-The sync button on the toolbar (next to "Copy HTML") cycles through three modes:
+The toolbar has a small chain button next to "Copy HTML" that turns scroll sync on and off:
 
-| Icon | Mode | Behaviour |
-|---|---|---|
-| → | Editor to preview only | Preview follows the editor. The default, and the one to keep. |
-| 🔗 | Both directions | Scrolling the preview also jumps the editor to the matching line. |
-| ⊘ | Off | No sync at all. |
+- **on** (accent colour) — the preview follows the editor
+- **off** (greyed out) — the two panes scroll independently
 
-You can also set it in Settings → Gusi Formatter → Scroll sync.
+Scrolling sync is on by default. Settings → Gusi Formatter → Scroll sync direction picks *which* side follows which: editor to preview only (default), or both directions.
 
 ## Custom themes
 
@@ -120,15 +117,12 @@ MIT License, see [LICENSE](./LICENSE).
 
 预览面板会跟着编辑区走——笔记滚到底，预览也跟到底。对齐是按行号算的（每个块都带着自己的源文件行号），不是按百分比，所以预览停靠的位置就是你正在读的那一段。
 
-工具栏上（"Copy HTML" 旁边）的同步按钮可以循环切换三种模式：
+工具栏上（"Copy HTML" 旁边）有个小小的链条按钮，一键开关滚动同步：
 
-| 图标 | 模式 | 行为 |
-|---|---|---|
-| → | 仅编辑区到预览 | 预览跟随编辑区。默认模式，建议保持这个。 |
-| 🔗 | 双向 | 滚动预览时，编辑器也会跳到对应行。 |
-| ⊘ | 关闭 | 完全不同步。 |
+- **开**（强调色）：预览跟随编辑区
+- **关**（灰色）：两边各自独立滚动
 
-也可以在 设置 → Gusi Formatter → Scroll sync 里改。
+默认是开的。设置 → Gusi Formatter → Scroll sync direction 里选「哪边跟哪边」：仅编辑区到预览（默认），或双向。
 
 ## 自定义主题
 
